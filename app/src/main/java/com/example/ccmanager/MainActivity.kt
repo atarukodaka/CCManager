@@ -15,7 +15,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     enum class Status { NOT_STARTED, READY, RUNNING, PAUSE, INTERVAL, DONE}
 
@@ -81,8 +80,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 //val spinnerParent = parent as Spinner
                 //val item = spinnerParent.selectedItem as String
 
-                //val adaptor = ArrayAdapter(this, android.R.layout.simple_list_item_1, R.array.pu_steps)
-                //var adaptor = ArrayAdapter.createFromResource(this, R.array.pu_steps, android.R.layout.simple_spinner_item )
                 spinnerSteps.setAdapter(step_adaptors[spinnerEvents.selectedItemPosition])
                 Log.d("snipperevent", "pos: ${spinnerEvents.selectedItemPosition}")
                 updateMaxCounters()
@@ -121,6 +118,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     public fun buttonStart(view: View) {
         btnStart.isClickable = false
+        initCounters()
         startReadyTimer()
     }
     public fun buttonStop(view: View) {
