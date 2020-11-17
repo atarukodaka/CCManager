@@ -31,9 +31,9 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val data = intent.getSerializableExtra("EXERCISE")
         if (data is ExerciseData) {
             exerciseData = data
-            textEvent.text = "Event: ${exerciseData.event}"
-            textStep.text = "Step: ${exerciseData.step}"
-            textGrade.text = "Grade: ${exerciseData.grade}"
+            textEvent.text = "${exerciseData.event}"
+            textStep.text = "${exerciseData.step}"
+            textGrade.text = "${exerciseData.grade}"
 
             Log.d("exercise", "${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}")
             Log.d("exercise", "rep: ${exerciseData.reps}, set: ${exerciseData.sets}, interval: ${exerciseData.interval}")
@@ -104,25 +104,25 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 if (state.set == exerciseData.sets){
                     finishExercise()
                 } else {
-                    speakText("interval of ${exerciseData.interval} seconds.")
-                    timer = startIntervalTimer()
+                     timer = startIntervalTimer()
                 }
                 updateUI()
             }
         }.start()
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun startIntervalTimer() : CountDownTimer {
+        speakText("interval of ${exerciseData.interval} seconds.")
         state.interval = 0
         state.tag = "INTERVAL"
         //status = Status.INTERVAL
 
-        return object: CountDownTimer(10 * 1000, 1000) {
+        return object: CountDownTimer(exerciseData.interval * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 state.upInterval()
                 //iInterval += 1
-                state.upInterval()
-                Log.d("IntervalTimer", "interval: ${state.interval}")
+                 Log.d("IntervalTimer", "interval: ${state.interval}")
                 beep(false)
                 updateUI()
             }
@@ -134,18 +134,21 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
     /////////////////////////////////////
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun finishExercise() {
-        state.tag = "DONE"
+        speakText("Finished")
+        finish()
+        //state.tag = "DONE"
 
         val msg = "Completed ${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}"
         val args = Bundle()
         args.putString("message", msg)
 
         Log.d("finish", msg)
-        val dialog = FinishedDialog()
-        dialog.setArguments(args)
-        dialog.show(supportFragmentManager, "NoticeDialog")
-        finish()
+        //val dialog = FinishedDialog()
+        //dialog.setArguments(args)
+        //dialog.show(supportFragmentManager, "NoticeDialog")
+        //finish()
     }
     fun updateUI() {
         textTicks.text = "Ticks: ${state.tick} / 6"
@@ -167,11 +170,10 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     // Sound: delegate to ExerciseSound object
     override fun onInit(stat: Int) {
         sound.onInit(stat)
-
     }
     fun beep(high: Boolean) {
         sound.beep(high)
-       }
+    }
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun speakText(text: String){
         sound.speakText(text)

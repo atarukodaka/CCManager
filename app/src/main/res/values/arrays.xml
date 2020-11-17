@@ -10,16 +10,16 @@
     </string-array>
 
     <string-array name="ps_steps">
-        <item>1: Wall Pushups</item>
-        <item>2: Incline Pushups</item>
-        <item>3: Kneeing Pushups</item>
-        <item>4: Half Pushups</item>
-        <item>5: Full Pushups</item>
-        <item>6: Close Pushups</item>
-        <item>7: Uneven Pushups</item>
-        <item>8: Half One-Arm Pushups</item>
-        <item>9: Assited One-Arm Pushups</item>
-        <item>10: One-Arm Pushups</item>
+        <item>Wall Pushups</item>
+        <item>Incline Pushups</item>
+        <item>Kneeing Pushups</item>
+        <item>Half Pushups</item>
+        <item>Full Pushups</item>
+        <item>Close Pushups</item>
+        <item>Uneven Pushups</item>
+        <item>Half One-Arm Pushups</item>
+        <item>Assited One-Arm Pushups</item>
+        <item>One-Arm Pushups</item>
     </string-array>
 
     <string-array name="sq_steps">

@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
         val event = spinnerEvents.selectedItem.toString()
         val step = spinnerSteps.selectedItem.toString()
         val grade = spinnerGrades.selectedItem.toString()
+        val interval :Int = editTextInterval.text.toString().toIntOrNull() ?: 0
 
         val pos_events = spinnerEvents.selectedItemPosition
         val pos_steps = spinnerSteps.selectedItemPosition
@@ -116,14 +117,14 @@ class MainActivity : AppCompatActivity() {
         val sets :Int = dataset.get_max_sets(pos_events, pos_steps, pos_grades)
         val reps : Int = dataset.get_max_reps(pos_events, pos_steps, pos_grades)
 
-        val exerciseData = ExerciseData(event, step, grade, 10, reps, sets)
+        val exerciseData = ExerciseData(event, step, grade, interval, reps, sets)
 
         val intent: Intent = Intent(this, ExerciseActivity::class.java)
         intent.putExtra("EXERCISE", exerciseData)
         startActivity(intent)
     }
 }
-///////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 data class ExerciseData (
     var event: String,
@@ -140,7 +141,7 @@ class MaxSetsRepsDataset {
     val max_sets_reps = arrayOf(
             // Push Ups
             arrayOf(
-                    arrayOf(arrayOf(1, 10), arrayOf(2, 25), arrayOf(3, 50)),
+                    arrayOf(arrayOf(2, 3), arrayOf(2, 25), arrayOf(3, 50)),
                     arrayOf(arrayOf(1, 10), arrayOf(2, 20), arrayOf(3, 40)),
                     arrayOf(arrayOf(1, 10), arrayOf(2, 15), arrayOf(3, 30)),
                     arrayOf(arrayOf(1, 10), arrayOf(2, 20), arrayOf(2, 25)),
