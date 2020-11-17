@@ -4,24 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:layout_editor_absoluteX="5dp"
+    tools:layout_editor_absoluteY="5dp">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="285dp"
-        android:layout_height="70dp"
+        android:layout_width="253dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="44dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/textStatus"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <Button
             android:id="@+id/btnStart"
-            android:layout_width="107dp"
-            android:layout_height="46dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:onClick="buttonStart"
             android:text="@string/start" />
 
@@ -36,32 +38,21 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="209dp"
-        android:layout_height="340dp"
+        android:layout_width="273dp"
+        android:layout_height="212dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/textStatus"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.297">
 
         <TextView
             android:id="@+id/textMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:text="Message"
             android:textSize="24sp" />
 
@@ -69,8 +60,6 @@
             android:id="@+id/textTicks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="37dp"
             android:text="Ticks"
             android:textSize="24sp" />
 
@@ -78,15 +67,13 @@
             android:id="@+id/textReps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="36dp"
             android:text="Reps"
             android:textSize="24sp" />
 
         <TextView
             android:id="@+id/textSets"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="40dp"
+            android:layout_height="wrap_content"
             android:text="Sets"
             android:textSize="24sp" />
 
@@ -94,21 +81,31 @@
             android:id="@+id/textInterval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="56dp"
-            android:text="0"
+            android:text="Interval"
             android:textSize="24sp" />
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="302dp"
-        android:layout_height="145dp"
-        android:layout_marginBottom="40dp"
+        android:layout_width="278dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="24dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Spinner
             android:id="@+id/spinnerEvents"
@@ -120,15 +117,17 @@
         <Spinner
             android:id="@+id/spinnerSteps"
             android:layout_width="match_parent"
-            android:layout_height="6dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:entries="@array/steps" />
+            android:entries="@array/ps_steps" />
 
         <Spinner
             android:id="@+id/spinnerGrades"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:entries="@array/grades" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
