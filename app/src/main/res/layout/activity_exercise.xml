@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExerciseActivity">
+
+    <LinearLayout
+        android:layout_width="288dp"
+        android:layout_height="112dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textGrade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Grade"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="273dp"
+        android:layout_height="212dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btnStop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.54">
+
+        <TextView
+            android:id="@+id/textMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Message"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textTicks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ticks"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textReps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reps"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textSets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sets"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textInterval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interval"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="188dp"
+        android:layout_weight="1"
+        android:onClick="buttonStop"
+        android:text="STOP"
+        app:layout_constraintBottom_toTopOf="@+id/textStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
