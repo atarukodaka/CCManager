@@ -75,14 +75,14 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/textReps"
+            android:id="@+id/textMaxReps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Reps"
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/textSets"
+            android:id="@+id/textMaxSets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sets"
@@ -114,7 +114,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:onClick="buttonStop"
-            android:text="STOP" />
+            android:text="@string/Stop" />
 
         <Button
             android:id="@+id/btnPauseResume"
@@ -123,7 +123,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:onClick="buttonPauseResume"
-            android:text="PAUSE" />
+            android:text="@string/Pause" />
     </LinearLayout>
 
 

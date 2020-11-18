@@ -20,12 +20,6 @@ class SoundController : TextToSpeech.OnInitListener {
     var beepHigh: Int = 0
     var beepMiddle: Int = 0
     var beepLow: Int = 0
-    /*
-    companion object {
-        var textToSpeech: TextToSpeech? = null
-    }
-
-     */
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun initialize(context: Context){
@@ -66,25 +60,6 @@ class SoundController : TextToSpeech.OnInitListener {
             Log.d("tts", "tts init failed")
         }
     }
-    /*
-    override fun onInit(stat: Int){
-        if (stat == TextToSpeech.SUCCESS) {
-            textToSpeech.let { tts ->
-                val locale = Locale.US
-                if (tts.isLanguageAvailable(locale) > TextToSpeech.LANG_AVAILABLE) {
-                    //tts.language = locale
-                    tts.setLanguage(locale)
-                    Log.d("tts", "set language: ${locale.toString()}")
-                } else {
-                    Log.d("tts", "set language failed")
-                }
-            }
-        } else {
-            Log.d("tts", "tts init failed")
-        }
-    }
-    */
-
     /////
     fun beep(height: String){
         //val tone = if (high) { beepHigh } else { beepLow }

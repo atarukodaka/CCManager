@@ -10,13 +10,15 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutButtons"
-        android:layout_width="253dp"
-        android:layout_height="64dp"
+        android:layout_width="266dp"
+        android:layout_height="102dp"
         android:layout_marginBottom="32dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
         <Button
             android:id="@+id/btnStart"
@@ -31,12 +33,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutExercise"
-        android:layout_width="278dp"
-        android:layout_height="140dp"
+        android:layout_width="296dp"
+        android:layout_height="148dp"
         android:layout_marginTop="32dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutInterval"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -65,19 +67,21 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutInterval"
-        android:layout_width="278dp"
-        android:layout_height="95dp"
+        android:layout_width="261dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="32dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutButtons"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutExercise">
 
         <TextView
             android:id="@+id/textInterval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Interval" />
+            android:text="@string/Interval" />
 
         <EditText
             android:id="@+id/editTextInterval"
@@ -87,6 +91,32 @@
             android:ems="10"
             android:inputType="number"
             android:text="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="244dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="45dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutInterval">
+
+        <TextView
+            android:id="@+id/textMaxReps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textMaxSets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
     </LinearLayout>
 
 

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">CCManager</string>
     <string name="start">Start</string>
-    <string name="status">Stoping</string>
+    <string name="Stop">STOP</string>
+    <string name="Pause">PAUSE</string>
+    <string name="Interval">Interval</string>
 </resources>

@@ -46,6 +46,7 @@ class ExerciseActivity : AppCompatActivity() {
         //timer = startReadyTimer()
         timer = startExerciseTimer()
     }
+    ///////////////////////////
     // onClick
     public fun buttonStop(view: View) {
         if (::timer.isInitialized) timer.cancel()
@@ -54,7 +55,7 @@ class ExerciseActivity : AppCompatActivity() {
     public fun buttonPauseResume(view: View) {
         btnPauseResume.text = "PAUSE"
         when (state.tag){
-            "PAUSE" -> startExerciseTimer(millisResume)
+            "PAUSE" -> timer = startExerciseTimer(millisResume)
             else -> state.tag = "PAUSING"
         }
     }
@@ -68,6 +69,7 @@ class ExerciseActivity : AppCompatActivity() {
                 //textDebug.text = sound.textToSpeech.language.toString()
                 if (state.tag == "PAUSING") {
                     state.tag = "PAUSE"
+                    btnPauseResume.text = "RESUME"
                     cancel()
                     millisResume = millisUntilFinished
                 } else {
@@ -79,7 +81,8 @@ class ExerciseActivity : AppCompatActivity() {
                     if (elapse_sec < 0) {
                         state.tag = "READY"
                         state.ready = elapse_sec * -1
-                        if (state.ready == 3) sound.speakText("get ready")
+                        if (state.ready == 5) sound.speakText("${exerciseData.step}")
+                        else if (state.ready <= 3) sound.speakText(state.ready.toString())
                     } else {
                         state.tag = "RUNNING"
                         state.set = (elapse_sec / (6 * exerciseData.reps + exerciseData.interval)).toInt() + 1
@@ -90,13 +93,19 @@ class ExerciseActivity : AppCompatActivity() {
                             state.tick = (mod % 6) + 1
                             state.rep = (mod / 6).toInt() + 1
                             if (state.tick == 1) {
-                                sound.speakText(state.rep.toString())
+                                if (state.rep == 1){
+                                    sound.speakText("set ${state.set} start")
+                                } else {
+                                    sound.speakText(state.rep.toString())
+                                }
                                 tone = "high"
                             }
                         } else {
                             state.tag = "INTERVAL"
-                            state.interval = mod - 6 * exerciseData.reps + 1
-                            if (state.interval == 1) sound.speakText("interval of ${exerciseData.interval} seconds.")
+                            state.interval = exerciseData.interval + 1 - (mod - 6 * exerciseData.reps + 1)
+
+                            if (state.interval == exerciseData.interval) sound.speakText("interval of ${exerciseData.interval} seconds.")
+                            else if (state.interval <= 3) sound.speakText(state.interval.toString())
                          }
                     }
                     sound.beep(tone)
@@ -134,11 +143,11 @@ class ExerciseActivity : AppCompatActivity() {
     }
     fun updateUI() {
         textMessage.text = state.tag
-        textTicks.text = "Ticks: ${state.tick} / 6"
-        textReady.text = "Ready: ${state.ready }"
-        textReps.text = "Reps: ${state.rep} / ${exerciseData.reps}"
-        textSets.text = "Sets: ${state.set} / ${exerciseData.sets}"
-        textInterval.text = "Interval: ${state.interval} / ${exerciseData.interval}"
+        textTicks.text = if (state.tag == "RUNNING") "Ticks: ${state.tick} / 6" else ""
+        textReady.text = if (state.tag == "READY") "Ready: ${state.ready }" else ""
+        textMaxReps.text = "Reps: ${state.rep} / ${exerciseData.reps}"
+        textMaxSets.text = "Sets: ${state.set} / ${exerciseData.sets}"
+        textInterval.text = if (state.tag == "INTERVAL") "Interval: ${state.interval} / ${exerciseData.interval}" else ""
     }
 }
 //////////////////////////////////////////////////////////////////////
@@ -146,11 +155,4 @@ data class ExerciseState (
         var tick: Int = 0, var rep: Int = 0, var set: Int = 0,
         var interval: Int = 0, var ready: Int = 0,
         var tag: String = "NOT_STARTED"
-){
-    fun incrReady() { ready += 1}
-    fun incrSet() { set += 1 }
-    fun incrInterval() { interval += 1}
-    fun incrTick() { tick += 1 }
-    fun incrRep() { rep += 1 }
-    //fun reset() { tick = 0; rep = 0; set = 0; interval = 0; ready = 0 }
-}
+)

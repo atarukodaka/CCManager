@@ -9,6 +9,42 @@
         <item>Headstand PUs</item>
     </string-array>
 
+    <string-array name="steps">
+        <item>Wall Pushups</item>
+        <item>Incline Pushups</item>
+        <item>Kneeing Pushups</item>
+        <item>Half Pushups</item>
+        <item>Full Pushups</item>
+        <item>Close Pushups</item>
+        <item>Uneven Pushups</item>
+        <item>Half One-Arm Pushups</item>
+        <item>Assited One-Arm Pushups</item>
+        <item>One-Arm Pushups</item>
+
+        <item>Shoulderstand Squats</item>
+        <item>Jackknife Squats</item>
+        <item>Supported Squats</item>
+        <item>Shoulderstand Squats</item>
+        <item>Jackknife Squats</item>
+        <item>Supported Squats</item>
+        <item>Shoulderstand Squats</item>
+        <item>Jackknife Squats</item>
+        <item>Supported Squats</item>
+        <item>Supported Squats</item>
+
+        <item>Vertical Pullups</item>
+        <item>Horizontal Pullups</item>
+        <item>Jackknife Pullups</item>
+        <item>Vertical Pullups</item>
+        <item>Horizontal Pullups</item>
+        <item>Jackknife Pullups</item>
+        <item>Vertical Pullups</item>
+        <item>Horizontal Pullups</item>
+        <item>Jackknife Pullups</item>
+        <item>Jackknife Pullups</item>
+
+    </string-array>
+
     <string-array name="ps_steps">
         <item>Wall Pushups</item>
         <item>Incline Pushups</item>
