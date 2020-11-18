@@ -7,13 +7,18 @@
     tools:context=".ExerciseActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="288dp"
         android:layout_height="112dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.56"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.009">
 
         <TextView
             android:id="@+id/textEvent"
@@ -41,18 +46,25 @@
         android:id="@+id/linearLayout2"
         android:layout_width="273dp"
         android:layout_height="212dp"
+        android:layout_marginBottom="24dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/btnStop"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.54">
+        app:layout_constraintHorizontal_bias="0.608"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/textMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Message"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textReady"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ready"
             android:textSize="24sp" />
 
         <TextView
@@ -85,19 +97,34 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="212dp"
+        android:layout_height="73dp"
         android:layout_marginBottom="32dp"
-        android:layout_weight="1"
-        android:onClick="buttonStop"
-        android:text="STOP"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="buttonStop"
+            android:text="STOP" />
+
+        <Button
+            android:id="@+id/btnPauseResume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:onClick="buttonPauseResume"
+            android:text="PAUSE" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,7 @@
         <item>2: Jackknife Squats</item>
         <item>3: Supported Squats</item>
     </string-array>
+
     <string-array name="pl_steps">
         <item>1: Vertical Pullups</item>
         <item>2: Horizontal Pullups</item>
@@ -34,41 +35,26 @@
     </string-array>
 
     <string-array name="lr_steps">
-        <item>1: Wall Pushups</item>
-        <item>2: Incline Pushups</item>
-        <item>3: Kneeing Pushups</item>
-        <item>4: Half Pushups</item>
-        <item>5: Full Pushups</item>
-        <item>6: Close Pushups</item>
-        <item>7: Uneven Pushups</item>
-        <item>8: Half One-Arm Pushups</item>
-        <item>9: Assited One-Arm Pushups</item>
-        <item>10: One-Arm Pushups</item>
+        <item>Knee Tucks</item>
+        <item>Flat Knee Raises</item>
+        <item>Flat Bent Leg Raises</item>
+        <item>Flat Frog Raises</item>
     </string-array>
+
     <string-array name="br_steps">
-        <item>1: Wall Pushups</item>
-        <item>2: Incline Pushups</item>
-        <item>3: Kneeing Pushups</item>
-        <item>4: Half Pushups</item>
-        <item>5: Full Pushups</item>
-        <item>6: Close Pushups</item>
-        <item>7: Uneven Pushups</item>
-        <item>8: Half One-Arm Pushups</item>
-        <item>9: Assited One-Arm Pushups</item>
-        <item>10: One-Arm Pushups</item>
+        <item>Short Bridges</item>
+        <item>Straight Bridges</item>
+        <item>Angled Bridges</item>
+        <item>Head Bridges</item>
     </string-array>
+
     <string-array name="hs_steps">
-        <item>1: Wall Pushups</item>
-        <item>2: Incline Pushups</item>
-        <item>3: Kneeing Pushups</item>
-        <item>4: Half Pushups</item>
-        <item>5: Full Pushups</item>
-        <item>6: Close Pushups</item>
-        <item>7: Uneven Pushups</item>
-        <item>8: Half One-Arm Pushups</item>
-        <item>9: Assited One-Arm Pushups</item>
-        <item>10: One-Arm Pushups</item>
+        <item>Wall Headstands</item>
+        <item>Crow Stands</item>
+        <item>Wall Handstands</item>
+        <item>Half Handstand PUshups</item>
     </string-array>
+
     <string-array name="grades">
         <item>Beginner</item>
         <item>Intermidiate</item>

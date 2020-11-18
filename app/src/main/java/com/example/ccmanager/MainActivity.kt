@@ -1,53 +1,29 @@
 package com.example.ccmanager
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 ////////////////////////////////////////////////////////////////////////////////
 class MainActivity : AppCompatActivity() {
-
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-          val step_adaptors = arrayOf(
-            ArrayAdapter.createFromResource(
-                this,
-                R.array.ps_steps,
-                android.R.layout.simple_spinner_dropdown_item
-            ),
-            ArrayAdapter.createFromResource(
-                this,
-                R.array.sq_steps,
-                android.R.layout.simple_spinner_dropdown_item
-            ),
-            ArrayAdapter.createFromResource(
-                this,
-                R.array.pl_steps,
-                android.R.layout.simple_spinner_dropdown_item
-            ),
-            ArrayAdapter.createFromResource(
-                this,
-                R.array.lr_steps,
-                android.R.layout.simple_spinner_dropdown_item
-            ),
-            ArrayAdapter.createFromResource(
-                this,
-                R.array.br_steps,
-                android.R.layout.simple_spinner_dropdown_item
-            ),
-            ArrayAdapter.createFromResource(
-                this,
-                R.array.hs_steps,
-                android.R.layout.simple_spinner_dropdown_item
-            )
-        )
+        val ar = arrayOf(R.array.ps_steps,R.array.sq_steps, R.array.pl_steps, R.array.lr_steps,  R.array.br_steps,  R.array.hs_steps)
+        val stepAdaptors = arrayOfNulls<ArrayAdapter<CharSequence>>(ar.size)
+
+        for ((index, elem) in ar.withIndex() ) {
+            stepAdaptors[index] = ArrayAdapter.createFromResource(this, elem, android.R.layout.simple_dropdown_item_1line)
+        }
 
         spinnerEvents.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -56,14 +32,12 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                spinnerSteps.setAdapter(step_adaptors[spinnerEvents.selectedItemPosition])
+                spinnerSteps.setAdapter(stepAdaptors[spinnerEvents.selectedItemPosition])
                 Log.d("snipperevent", "pos: ${spinnerEvents.selectedItemPosition}")
-                updateMaxCounters()
-                //updateUI()
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+        /*
         spinnerSteps.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -71,12 +45,13 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                updateMaxCounters()
+                //updateMaxCounters()
                 //updateUI()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
         spinnerGrades.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -84,14 +59,17 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                updateMaxCounters()
+                //updateMaxCounters()
                 //updateUI()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+         */
     }
 
+    /*
     fun updateMaxCounters() {
         val pos_events = spinnerEvents.selectedItemPosition
         val pos_steps = spinnerSteps.selectedItemPosition
@@ -102,6 +80,8 @@ class MainActivity : AppCompatActivity() {
         //iMaxReps = dataset.get_max_reps(pos_events, pos_steps, pos_grades)
        //Log.d("max sets reps", "sets: ${iMaxSets}, reps: ${iMaxReps}")
     }
+
+     */
 
     public fun buttonStart(view: View) {
         val event = spinnerEvents.selectedItem.toString()

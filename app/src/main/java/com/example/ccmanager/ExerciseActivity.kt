@@ -1,31 +1,34 @@
 package com.example.ccmanager
 
-import android.media.AudioAttributes
-import android.media.SoundPool
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_exercise.*
-import java.util.*
+import java.lang.Math.round
 
 //////////////////////////////////////////////////////////////////
-class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class ExerciseActivity : AppCompatActivity() {
+    companion object {
+       // var sound :SoundController = SoundController()
+    }
     lateinit var timer: CountDownTimer
     lateinit var exerciseData: ExerciseData
     var state = ExerciseState()
-    var sound = ExerciseSound()
+    var sound = SoundController()
+    var millisResume : Long = 0
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
 
-        sound.onCreate(this)
+        //sound.initialize(this)
+        sound.initialize(this)
+        //sound.speakText("test")
 
         // retrieve exercise data
         val data = intent.getSerializableExtra("EXERCISE")
@@ -35,110 +38,89 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             textStep.text = "${exerciseData.step}"
             textGrade.text = "${exerciseData.grade}"
 
+            //sound.speakText("do set of ${exerciseData.sets} with repitition of ${exerciseData.reps}")
             Log.d("exercise", "${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}")
             Log.d("exercise", "rep: ${exerciseData.reps}, set: ${exerciseData.sets}, interval: ${exerciseData.interval}")
         }
-        timer = startReadyTimer()
-    }
 
+        //timer = startReadyTimer()
+        timer = startExerciseTimer()
+    }
     // onClick
     public fun buttonStop(view: View) {
         if (::timer.isInitialized) timer.cancel()
         finish()
     }
+    public fun buttonPauseResume(view: View) {
+        btnPauseResume.text = "PAUSE"
+        when (state.tag){
+            "PAUSE" -> startExerciseTimer(millisResume)
+            else -> state.tag = "PAUSING"
+        }
+    }
+
     /////////////////////////////////////////////////////////////////
-    // timers
-    fun startReadyTimer() : CountDownTimer {
-        //status = Status.READY
-        state.tag = "READY"
-        state.ready = 0
-
-        return object: CountDownTimer(6000L, 1000L) {
+    fun startExerciseTimer(millis: Long = (6 + (exerciseData.reps * 6 + exerciseData.interval ) * exerciseData.sets - exerciseData.interval ).toLong()* 1000L) : CountDownTimer {
+        Log.d("ExerciseTimer", "millis: ${millis}")
+        return object: CountDownTimer(millis, 1000L) {
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onTick(millisUntilFinished: Long) {
-                state.upReady()
-                Log.d("ReadyTimer", "ready: ${state.ready}")
-
-                if (state.ready == 1){
-                    beep(true)
-                    speakText("ready")
+                //textDebug.text = sound.textToSpeech.language.toString()
+                if (state.tag == "PAUSING") {
+                    state.tag = "PAUSE"
+                    cancel()
+                    millisResume = millisUntilFinished
                 } else {
-                    beep(false)
+                    val remaining_sec: Int = round(millisUntilFinished.toDouble() / 1000).toInt()
+                    val total_sec = 6 + (exerciseData.reps * 6 + exerciseData.interval) * exerciseData.sets - exerciseData.interval
+                    val elapse_sec = total_sec - remaining_sec - 6
+
+                    var tone: String = "low"
+                    if (elapse_sec < 0) {
+                        state.tag = "READY"
+                        state.ready = elapse_sec * -1
+                        if (state.ready == 3) sound.speakText("get ready")
+                    } else {
+                        state.tag = "RUNNING"
+                        state.set = (elapse_sec / (6 * exerciseData.reps + exerciseData.interval)).toInt() + 1
+                        val mod = (elapse_sec % (6 * exerciseData.reps + exerciseData.interval))
+
+                        if (mod < 6 * exerciseData.reps) {
+                            state.tag = "RUNNING"
+                            state.tick = (mod % 6) + 1
+                            state.rep = (mod / 6).toInt() + 1
+                            if (state.tick == 1) {
+                                sound.speakText(state.rep.toString())
+                                tone = "high"
+                            }
+                        } else {
+                            state.tag = "INTERVAL"
+                            state.interval = mod - 6 * exerciseData.reps + 1
+                            if (state.interval == 1) sound.speakText("interval of ${exerciseData.interval} seconds.")
+                         }
+                    }
+                    sound.beep(tone)
+
+                    val msg = "[${state.tag}] remaining_sec: ${remaining_sec}, elapse_sec: ${elapse_sec}, set: ${state.set}, interval: ${state.interval}, rep: ${state.rep}, tick: ${state.tick}"
+                    textMessage.text = msg
+                    Log.d("ExerciseTimer", msg)
                 }
                 updateUI()
             }
-            override fun onFinish() {
-                timer = startWorkoutTimer()
-                updateUI()
-            }
-        }.start()
-    }
-    fun startWorkoutTimer() : CountDownTimer {
-        state.tag = "RUNNING"
-        state.rep = 0
-        state.tick = 0
-        state.upSet()
 
-        return object: CountDownTimer((exerciseData.reps * 6 * 1000).toLong(), 1000) {
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-            override fun onTick(millisUntilFinished: Long){
-                state.upTick()
-
-                if (state.tick > 6) { state.tick = 1 }
-                Log.d("WorkoutTimer", "tick: ${state.tick}")
-
-                if (state.tick == 1) {
-                    //iRep += 1
-                    state.upRep()
-                    speakText(state.rep.toString())
-                    beep(true)
-                } else if (state.tick == 4) {
-                    beep(true)
-                } else {
-                    beep(false)
-                }
-                updateUI()
-            }
-            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onFinish() {
-                if (state.set == exerciseData.sets){
-                    finishExercise()
-                } else {
-                     timer = startIntervalTimer()
-                }
-                updateUI()
+                state.tag = "FINISHED"
+                sound.speakText("finished. well done.")
             }
         }.start()
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun startIntervalTimer() : CountDownTimer {
-        speakText("interval of ${exerciseData.interval} seconds.")
-        state.interval = 0
-        state.tag = "INTERVAL"
-        //status = Status.INTERVAL
-
-        return object: CountDownTimer(exerciseData.interval * 1000L, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                state.upInterval()
-                //iInterval += 1
-                 Log.d("IntervalTimer", "interval: ${state.interval}")
-                beep(false)
-                updateUI()
-            }
-            override fun onFinish() {
-                timer = startReadyTimer()
-                updateUI()
-            }
-        }.start()
-    }
     /////////////////////////////////////
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun finishExercise() {
-        speakText("Finished")
+        sound.speakText("Finished. Well done.")
         finish()
-        //state.tag = "DONE"
 
         val msg = "Completed ${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}"
         val args = Bundle()
@@ -151,92 +133,24 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         //finish()
     }
     fun updateUI() {
+        textMessage.text = state.tag
         textTicks.text = "Ticks: ${state.tick} / 6"
+        textReady.text = "Ready: ${state.ready }"
         textReps.text = "Reps: ${state.rep} / ${exerciseData.reps}"
         textSets.text = "Sets: ${state.set} / ${exerciseData.sets}"
         textInterval.text = "Interval: ${state.interval} / ${exerciseData.interval}"
-        // textStatus.text = status.toString()
-
-        textMessage.text =
-            when (state.tag) {
-                "RUNNING" -> { "START ! " }
-                "INTERVAL" -> { "INTERVAL: ${state.interval} / ${exerciseData.interval}" }
-                "READY" -> { "READY: ${6 - state.ready + 1}" }
-                else ->  { "" }
-            }
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    // Sound: delegate to ExerciseSound object
-    override fun onInit(stat: Int) {
-        sound.onInit(stat)
-    }
-    fun beep(high: Boolean) {
-        sound.beep(high)
-    }
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun speakText(text: String){
-        sound.speakText(text)
-    }
-
 }
 //////////////////////////////////////////////////////////////////////
-
 data class ExerciseState (
         var tick: Int = 0, var rep: Int = 0, var set: Int = 0,
         var interval: Int = 0, var ready: Int = 0,
-        var tag: String = "NOT_STARTED",
-        //var status: ExerciseActivity.Status = ExerciseActivity.Status.NOT_STARTED
+        var tag: String = "NOT_STARTED"
 ){
-    fun upReady() { ready += 1}
-    fun upSet() { set += 1 }
-    fun upInterval() { interval += 1}
-    fun upTick() { tick += 1 }
-    fun upRep() { rep += 1 }
-
+    fun incrReady() { ready += 1}
+    fun incrSet() { set += 1 }
+    fun incrInterval() { interval += 1}
+    fun incrTick() { tick += 1 }
+    fun incrRep() { rep += 1 }
     //fun reset() { tick = 0; rep = 0; set = 0; interval = 0; ready = 0 }
-}
-class ExerciseSound {
-    // Beep, Speech
-    lateinit var soundPool: SoundPool
-    private var textToSpeech: TextToSpeech? = null
-    var beepHigh: Int = 0
-    var beepLow: Int = 0
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun onCreate(obj :ExerciseActivity){
-        textToSpeech = TextToSpeech(obj, obj)
-        val audioAttributes = AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_GAME)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build()
-        soundPool = SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(2).build()
-        beepHigh = soundPool.load(obj, R.raw.beep_high, 1)
-        beepLow = soundPool.load(obj, R.raw.beep_low, 1)
-    }
-    fun onInit(stat: Int){
-        if (stat == TextToSpeech.SUCCESS) {
-            textToSpeech?.let { tts ->
-                val locale = Locale.US
-                if (tts.isLanguageAvailable(locale) > TextToSpeech.LANG_AVAILABLE) {
-                    tts.language = locale
-                } else {
-                    Log.d("tts", "set language failed")
-                }
-            }
-        } else {
-            Log.d("tts", "tts init failed")
-        }
-    }
-    /////
-    fun beep(high: Boolean) {
-        //val tone = if (high) { ToneGenerator.TONE_CDMA_ONE_MIN_BEEP } else { ToneGenerator.TONE_PROP_BEEP }
-        //tg.startTone(tone)
-        var tone = if (high) { beepHigh } else { beepLow }
-        soundPool.play(tone, 1.0f, 1.0f, 0, 0, 1.0f)
-    }
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun speakText(text: String){
-        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
-    }
 }
