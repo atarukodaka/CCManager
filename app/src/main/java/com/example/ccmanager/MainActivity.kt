@@ -1,30 +1,74 @@
 package com.example.ccmanager
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 ////////////////////////////////////////////////////////////////////////////////
 class MainActivity : AppCompatActivity() {
+    val spFilename = "ccmanager_preference"
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val ar = arrayOf(R.array.ps_steps,R.array.sq_steps, R.array.pl_steps, R.array.lr_steps,  R.array.br_steps,  R.array.hs_steps)
+        var res: Resources = resources
+        res.getIdentifier("pu_steps", "arrays", getPackageName())
+        //res.getString(   )
+
+
+        // shared preference: interval
+        val sp: SharedPreferences = getSharedPreferences(spFilename, Context.MODE_PRIVATE)
+        //val editor:SharedPreferences.Editor =  sp.edit()
+        val interval: Int = sp.getInt("interval", 30)
+        //Log.d("main", "key interval null? : ${interval == null}")
+        editTextInterval.setText(interval.toString())
+        editTextInterval.setOnEditorActionListener { view, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val editor: SharedPreferences.Editor = sp.edit()
+                val edittext_interval: Int =  view.text.toString().toInt() // TODO: overflow
+                editor.putInt("interval", edittext_interval)
+                editor.apply()
+                Log.d("main/sp", "applied: interval = ${edittext_interval}")
+            }
+            false
+        }
+
+        // show records
+        var text = ""
+        val records: SharedPreferences = getSharedPreferences("records", Context.MODE_PRIVATE)
+        val map = records.all
+        records.all.forEach {
+            text += "${it.key}: ${it.value}"
+
+        }
+        //records.getString("records1", "")
+        Log.d("main", "records: ${text}")
+        textRecords.text = text
+        // spinners
+        val ar = arrayOf(R.array.ps_steps, R.array.sq_steps, R.array.pl_steps, R.array.lr_steps, R.array.br_steps, R.array.hs_steps)
         val stepAdaptors = arrayOfNulls<ArrayAdapter<CharSequence>>(ar.size)
 
         for ((index, elem) in ar.withIndex() ) {
             stepAdaptors[index] = ArrayAdapter.createFromResource(this, elem, android.R.layout.simple_dropdown_item_1line)
         }
-        val context = this
+        //val arr = arrayOf<String>("AAA", "BBB")
+        //stepAdaptors[0] = ArrayAdapter<CharSequence>(this, android.R.layout.simple_dropdown_item_1line, arr)
 
         spinnerEvents.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -81,6 +125,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
     fun createExerciseDataFromSpinners () : ExerciseData {
+
         val event = spinnerEvents.selectedItem.toString()
         val step = spinnerSteps.selectedItem.toString()
         val grade = spinnerGrades.selectedItem.toString()

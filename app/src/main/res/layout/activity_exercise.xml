@@ -114,7 +114,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:onClick="buttonStop"
-            android:text="@string/Stop" />
+            android:text="STOP" />
 
         <Button
             android:id="@+id/btnPauseResume"

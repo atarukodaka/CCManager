@@ -34,7 +34,8 @@ class DatasetController {
     */
 
     val volumns = arrayOf(
-            ExerciseVolumnData(0,0,0,0,1,10),
+            //ExerciseVolumnData(0,0,0,0,1,10),
+            ExerciseVolumnData(0,0,0,0,2,2), // for Debug
             ExerciseVolumnData(1,0,0,1,2,25),
             ExerciseVolumnData(2,0,0,2,3,50),
             ExerciseVolumnData(3,0,1,0,1,10),
@@ -142,15 +143,19 @@ class DatasetController {
             ExerciseVolumnData(105,3,5,0,1,5),
             ExerciseVolumnData(106,3,5,1,2,10),
             ExerciseVolumnData(107,3,5,2,2,20),
-
             )
 
     fun find_volumn (event: Int, step: Int, grade: Int) : ExerciseVolumnData? {
+
+        return volumns.filter { it.event == event && it.step == step && it.grade == grade}.first()
+        /*
         volumns.forEach {
             if (it.event == event && it.step == step && it.grade == grade) return it
         }
         Log.d("find_volumn", "not found: ${event}/${step}/${grade}")
         return null
+
+         */
     }
 }
 /*

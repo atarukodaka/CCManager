@@ -1,5 +1,7 @@
 package com.example.ccmanager
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_exercise.*
 import java.lang.Math.round
+import java.time.LocalDateTime
 
 //////////////////////////////////////////////////////////////////
 class ExerciseActivity : AppCompatActivity() {
@@ -48,7 +51,7 @@ class ExerciseActivity : AppCompatActivity() {
     }
     ///////////////////////////
     // onClick
-    public fun buttonStop(view: View) {
+    public fun buttonStop(view: View) { // cancel timer and back to main activity
         if (::timer.isInitialized) timer.cancel()
         finish()
     }
@@ -56,6 +59,7 @@ class ExerciseActivity : AppCompatActivity() {
         btnPauseResume.text = "PAUSE"
         when (state.tag){
             "PAUSE" -> timer = startExerciseTimer(millisResume)
+            "FINISHED" -> timer = startExerciseTimer()
             else -> state.tag = "PAUSING"
         }
     }
@@ -73,15 +77,17 @@ class ExerciseActivity : AppCompatActivity() {
                     cancel()
                     millisResume = millisUntilFinished
                 } else {
+                    val readyCount = 6
+                    val tickCount = 6
                     val remaining_sec: Int = round(millisUntilFinished.toDouble() / 1000).toInt()
-                    val total_sec = 6 + (exerciseData.reps * 6 + exerciseData.interval) * exerciseData.sets - exerciseData.interval
-                    val elapse_sec = total_sec - remaining_sec - 6
+                    val total_sec = readyCount + (exerciseData.reps * 6 + exerciseData.interval) * exerciseData.sets - exerciseData.interval
+                    val elapse_sec = total_sec - remaining_sec - readyCount
 
                     var tone: String = "low"
                     if (elapse_sec < 0) {
                         state.tag = "READY"
                         state.ready = elapse_sec * -1
-                        if (state.ready == 5) sound.speakText("${exerciseData.step}")
+                        if (state.ready == readyCount -1) sound.speakText("${exerciseData.step}")
                         else if (state.ready <= 3) sound.speakText(state.ready.toString())
                     } else {
                         state.tag = "RUNNING"
@@ -104,8 +110,10 @@ class ExerciseActivity : AppCompatActivity() {
                             state.tag = "INTERVAL"
                             state.interval = exerciseData.interval + 1 - (mod - 6 * exerciseData.reps + 1)
 
-                            if (state.interval == exerciseData.interval) sound.speakText("interval of ${exerciseData.interval} seconds.")
-                            else if (state.interval <= 3) sound.speakText(state.interval.toString())
+                            if (state.interval == exerciseData.interval) {
+                                tone = "high"
+                                sound.speakText("set ${state.set} done. interval of ${exerciseData.interval} seconds.")
+                            } else if (state.interval <= 3) sound.speakText(state.interval.toString())
                          }
                     }
                     sound.beep(tone)
@@ -119,8 +127,21 @@ class ExerciseActivity : AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onFinish() {
+                btnStop.text = "BACK"
+                btnPauseResume.text = "RESTART"
                 state.tag = "FINISHED"
-                sound.speakText("finished. well done.")
+
+                Log.d("ExerciseTimer", "Finished: ${state.tag}")
+                // record
+                val sp: SharedPreferences = getSharedPreferences("records", Context.MODE_PRIVATE)
+                val editor: SharedPreferences.Editor = sp.edit()
+                val cur = LocalDateTime.now()
+
+                editor.putString(cur.toString(), "${exerciseData.event}/${exerciseData.step}/${exerciseData.grade}")
+                editor.apply()
+
+                sound.speakText("all sets finished. well done.")
+                updateUI()
             }
         }.start()
     }
@@ -143,11 +164,11 @@ class ExerciseActivity : AppCompatActivity() {
     }
     fun updateUI() {
         textMessage.text = state.tag
-        textTicks.text = if (state.tag == "RUNNING") "Ticks: ${state.tick} / 6" else ""
-        textReady.text = if (state.tag == "READY") "Ready: ${state.ready }" else ""
+        textTicks.text = "Ticks: ${state.tick} / 6"
+        textReady.text = "Ready: ${state.ready }"
         textMaxReps.text = "Reps: ${state.rep} / ${exerciseData.reps}"
         textMaxSets.text = "Sets: ${state.set} / ${exerciseData.sets}"
-        textInterval.text = if (state.tag == "INTERVAL") "Interval: ${state.interval} / ${exerciseData.interval}" else ""
+        textInterval.text = "Interval: ${state.interval} / ${exerciseData.interval}"
     }
 }
 //////////////////////////////////////////////////////////////////////

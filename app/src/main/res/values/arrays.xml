@@ -9,42 +9,6 @@
         <item>Headstand PUs</item>
     </string-array>
 
-    <string-array name="steps">
-        <item>Wall Pushups</item>
-        <item>Incline Pushups</item>
-        <item>Kneeing Pushups</item>
-        <item>Half Pushups</item>
-        <item>Full Pushups</item>
-        <item>Close Pushups</item>
-        <item>Uneven Pushups</item>
-        <item>Half One-Arm Pushups</item>
-        <item>Assited One-Arm Pushups</item>
-        <item>One-Arm Pushups</item>
-
-        <item>Shoulderstand Squats</item>
-        <item>Jackknife Squats</item>
-        <item>Supported Squats</item>
-        <item>Shoulderstand Squats</item>
-        <item>Jackknife Squats</item>
-        <item>Supported Squats</item>
-        <item>Shoulderstand Squats</item>
-        <item>Jackknife Squats</item>
-        <item>Supported Squats</item>
-        <item>Supported Squats</item>
-
-        <item>Vertical Pullups</item>
-        <item>Horizontal Pullups</item>
-        <item>Jackknife Pullups</item>
-        <item>Vertical Pullups</item>
-        <item>Horizontal Pullups</item>
-        <item>Jackknife Pullups</item>
-        <item>Vertical Pullups</item>
-        <item>Horizontal Pullups</item>
-        <item>Jackknife Pullups</item>
-        <item>Jackknife Pullups</item>
-
-    </string-array>
-
     <string-array name="ps_steps">
         <item>Wall Pushups</item>
         <item>Incline Pushups</item>
@@ -59,15 +23,22 @@
     </string-array>
 
     <string-array name="sq_steps">
-        <item>1: Shoulderstand Squats</item>
-        <item>2: Jackknife Squats</item>
-        <item>3: Supported Squats</item>
+        <item>Shoulderstand Squats</item>
+        <item>Jackknife Squats</item>
+        <item>Supported Squats</item>
+        <item>Half Squats</item>
+        <item>Full Squats</item>
+        <item>Closed Squats</item>
+        <item>Uneven Squats</item>
+        <item>Half One-Leg Squats</item>
+        <item>Assisted One-Leg Squats</item>
+        <item>One-Leg Squats</item>
     </string-array>
 
     <string-array name="pl_steps">
-        <item>1: Vertical Pullups</item>
-        <item>2: Horizontal Pullups</item>
-        <item>3: Jackknife Pullups</item>
+        <item>Vertical Pullups</item>
+        <item>Horizontal Pullups</item>
+        <item>Jackknife Pullups</item>
     </string-array>
 
     <string-array name="lr_steps">
@@ -95,5 +66,11 @@
         <item>Beginner</item>
         <item>Intermidiate</item>
         <item>Senior</item>
+    </string-array>
+
+    <string-array name="grades_abbr">
+        <item>BEG</item>
+        <item>INT</item>
+        <item>SNR</item>
     </string-array>
 </resources>
