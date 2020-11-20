@@ -16,9 +16,6 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 
 ////////////////////////////////////////////////////////////////////////////////
 class MainActivity : AppCompatActivity() {
@@ -30,13 +27,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // debug
-        val cur: LocalDateTime = LocalDateTime.now()
 
-        val datetimePattern = "yyyy-MM-dd HH:mm:ss"
 
-        val formatter = DateTimeFormatter.ofPattern(datetimePattern)
-        val formatted_time = cur.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-        Log.d("main", formatted_time)
 
         // shared preference: interval
         val sp: SharedPreferences = getSharedPreferences(spFilename, Context.MODE_PRIVATE)
@@ -121,7 +113,7 @@ class MainActivity : AppCompatActivity() {
         val sets: Int = vol?.sets ?: 0
         val reps: Int = vol?.reps ?: 0
 
-        return ExerciseData(event, step, grade, interval, sets, reps)
+        return ExerciseData(pos_events, event, pos_steps, step, pos_grades, grade, interval, sets, reps)
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////

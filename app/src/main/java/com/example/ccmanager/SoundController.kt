@@ -51,7 +51,7 @@ class SoundController : TextToSpeech.OnInitListener {
                     //textDebug.text = locale.toString()
                     Log.d("tts", "set language: ${locale.toString()}")
                 } else {
-                    Log.d("tts", "set language failed (${locale.toString()} -> ${tts.language.toString()})")
+                    Log.d("tts", "set language failed (${locale.toString()} )")
                 }
 
             }

@@ -5,8 +5,11 @@ import android.content.res.Resources
 import android.util.Log
 
 data class ExerciseData (
+        var event_id: Int,
         var event: String,
+        var step_id: Int,
         var step: String,
+        var grade_id: Int,
         var grade: String,
 
         var interval: Int = 10,
@@ -17,6 +20,9 @@ data class ExerciseData (
 data class ExerciseVolumnData(val event: Int, val step: Int, val grade: Int, val sets: Int, val reps: Int)
 
 class DatasetController (var context: Context) {
+    fun createExerciseData(event_id: Int, step_id: Int, grade_id: Int, interval: Int, sets: Int, reps: Int){
+        //val event = context.resources.getStringArray(R.s)
+    }
     fun find_volumn  (event: Int, step: Int, grade: Int) : ExerciseVolumnData? {
         Log.d("ExerciseDataset", "given/event: ${event}, step: ${step}, grade: ${grade}")
         val index: Int = event * 30 + step * 3 + grade

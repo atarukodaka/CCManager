@@ -33,7 +33,6 @@ class ExerciseActivity : AppCompatActivity() {
 
         //sound.initialize(this)
         sound.initialize(this)
-        //sound.speakText("test")
 
         // retrieve exercise data
         val data = intent.getSerializableExtra("EXERCISE")
@@ -53,6 +52,7 @@ class ExerciseActivity : AppCompatActivity() {
     // onClick
     public fun buttonStop(view: View) { // cancel timer and back to main activity
         if (::timer.isInitialized) timer.cancel()
+        finishExercise() // TODO: DEBUG
         finish()
     }
     public fun buttonPauseResume(view: View) {
@@ -135,18 +135,31 @@ class ExerciseActivity : AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onFinish() {
-                btnStop.text = resources.getString(R.string.Back)
-                btnPauseResume.text = resources.getString(R.string.Restart)
-                state.tag = "FINISHED"
-
-                Log.d("ExerciseTimer", "Finished: ${state.tag}")
-                writeRecord()
-                sound.speakText("all sets finished. well done.")
-                updateUI()
+                finishExercise()
             }
         }.start()
     }
+    fun finishExercise(){
+        btnStop.text = resources.getString(R.string.Back)
+        btnPauseResume.text = resources.getString(R.string.Restart)
+        state.tag = "FINISHED"
 
+        Log.d("ExerciseTimer", "Finished: ${state.tag}")
+
+        val curr = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formatted = curr.format(formatter)
+        val msg = arrayOf<String>(formatted,
+                exerciseData.event_id.toString(), exerciseData.event,
+                exerciseData.step_id.toString(), exerciseData.step,
+                exerciseData.grade_id.toString(), exerciseData.grade,
+                exerciseData.sets.toString(), exerciseData.reps.toString()
+        ).joinToString(",")
+        RecordController(this).addRecord(msg + "\n")
+
+        sound.speakText("all sets finished. well done.")
+        updateUI()
+    }
     fun updateUI() {
         textMessage.text = state.tag
         textTicks.text = "Ticks: ${state.tick} / 6"
@@ -154,24 +167,6 @@ class ExerciseActivity : AppCompatActivity() {
         textMaxReps.text = "Reps: ${state.rep} / ${exerciseData.reps}"
         textMaxSets.text = "Sets: ${state.set} / ${exerciseData.sets}"
         textInterval.text = "Interval: ${state.interval} / ${exerciseData.interval}"
-    }
-    fun writeRecord() {
-        // record
-        val sp: SharedPreferences = getSharedPreferences("records", Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = sp.edit()
-        val cur = LocalDateTime.now()
-        //val datetimePattern = "yyyy-MM-DD HH:mm:ss"
-
-        //val formatter = DateTimeFormatter.ofPattern(datetimePattern)
-        //val formatted_time = cur.format(formatter)
-        val formatted_time = cur.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-        //val formatted_time = cur.toString()
-        //val step_short: String = resources.getStringArray(R.array.push_steps_short)[exerciseData.step]
-        val msg = "${exerciseData.event}/${exerciseData.step}/${exerciseData.sets}x${exerciseData.reps}"
-        Log.d("ExerciseActity", "${formatted_time}: ${msg}")
-        editor.putString(formatted_time, msg)
-        editor.apply()
-
     }
 }
 //////////////////////////////////////////////////////////////////////
