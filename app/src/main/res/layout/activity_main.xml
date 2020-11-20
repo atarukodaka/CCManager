@@ -10,19 +10,18 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutButtons"
-        android:layout_width="266dp"
-        android:layout_height="102dp"
+        android:layout_width="300dp"
+        android:layout_height="205dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/textRecords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/btnStart"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:onClick="buttonStart"
@@ -31,9 +30,10 @@
         <Button
             android:id="@+id/btnShowRecord"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:text="Show Records" />
+            android:onClick="buttonRecords"
+            android:text="Records" />
 
     </LinearLayout>
 
@@ -43,6 +43,7 @@
         android:layout_height="148dp"
         android:layout_marginTop="32dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutInterval"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:entries="@array/ps_steps" />
+            android:entries="@array/push_steps" />
 
         <Spinner
             android:id="@+id/spinnerGrades"
@@ -75,12 +76,11 @@
         android:id="@+id/linearLayoutInterval"
         android:layout_width="261dp"
         android:layout_height="67dp"
-        android:layout_marginTop="32dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutExercise">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/textInterval"
@@ -103,12 +103,11 @@
         android:id="@+id/linearLayout4"
         android:layout_width="244dp"
         android:layout_height="41dp"
-        android:layout_marginTop="45dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutInterval">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/textMaxReps"

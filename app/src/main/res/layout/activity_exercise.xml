@@ -46,7 +46,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="273dp"
         android:layout_height="212dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,8 +99,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="212dp"
-        android:layout_height="73dp"
+        android:layout_width="277dp"
+        android:layout_height="104dp"
         android:layout_marginBottom="32dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -110,16 +110,16 @@
         <Button
             android:id="@+id/btnStop"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:onClick="buttonStop"
-            android:text="STOP" />
+            android:text="@string/Stop" />
 
         <Button
             android:id="@+id/btnPauseResume"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:onClick="buttonPauseResume"

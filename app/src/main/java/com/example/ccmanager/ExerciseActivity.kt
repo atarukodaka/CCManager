@@ -11,7 +11,9 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_exercise.*
 import java.lang.Math.round
+import java.sql.Time
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 //////////////////////////////////////////////////////////////////
 class ExerciseActivity : AppCompatActivity() {
@@ -37,15 +39,13 @@ class ExerciseActivity : AppCompatActivity() {
         val data = intent.getSerializableExtra("EXERCISE")
         if (data is ExerciseData) {
             exerciseData = data
-            textEvent.text = "${exerciseData.event}"
-            textStep.text = "${exerciseData.step}"
-            textGrade.text = "${exerciseData.grade}"
+            textEvent.text = exerciseData.event
+            textStep.text = exerciseData.step
+            textGrade.text = exerciseData.grade
 
-            //sound.speakText("do set of ${exerciseData.sets} with repitition of ${exerciseData.reps}")
             Log.d("exercise", "${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}")
             Log.d("exercise", "rep: ${exerciseData.reps}, set: ${exerciseData.sets}, interval: ${exerciseData.interval}")
         }
-
         //timer = startReadyTimer()
         timer = startExerciseTimer()
     }
@@ -56,7 +56,7 @@ class ExerciseActivity : AppCompatActivity() {
         finish()
     }
     public fun buttonPauseResume(view: View) {
-        btnPauseResume.text = "PAUSE"
+        btnPauseResume.text = resources.getString(R.string.Pause)
         when (state.tag){
             "PAUSE" -> timer = startExerciseTimer(millisResume)
             "FINISHED" -> timer = startExerciseTimer()
@@ -67,13 +67,14 @@ class ExerciseActivity : AppCompatActivity() {
     /////////////////////////////////////////////////////////////////
     fun startExerciseTimer(millis: Long = (6 + (exerciseData.reps * 6 + exerciseData.interval ) * exerciseData.sets - exerciseData.interval ).toLong()* 1000L) : CountDownTimer {
         Log.d("ExerciseTimer", "millis: ${millis}")
+
         return object: CountDownTimer(millis, 1000L) {
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onTick(millisUntilFinished: Long) {
                 //textDebug.text = sound.textToSpeech.language.toString()
                 if (state.tag == "PAUSING") {
                     state.tag = "PAUSE"
-                    btnPauseResume.text = "RESUME"
+                    btnPauseResume.text = resources.getString(R.string.Resume)
                     cancel()
                     millisResume = millisUntilFinished
                 } else {
@@ -87,8 +88,11 @@ class ExerciseActivity : AppCompatActivity() {
                     if (elapse_sec < 0) {
                         state.tag = "READY"
                         state.ready = elapse_sec * -1
-                        if (state.ready == readyCount -1) sound.speakText("${exerciseData.step}")
-                        else if (state.ready <= 3) sound.speakText(state.ready.toString())
+
+                        val text: String =
+                            if (state.ready == readyCount -1) exerciseData.step.toString()
+                            else state.ready.toString()
+                        sound.speakText(text)
                     } else {
                         state.tag = "RUNNING"
                         state.set = (elapse_sec / (6 * exerciseData.reps + exerciseData.interval)).toInt() + 1
@@ -113,7 +117,11 @@ class ExerciseActivity : AppCompatActivity() {
                             if (state.interval == exerciseData.interval) {
                                 tone = "high"
                                 sound.speakText("set ${state.set} done. interval of ${exerciseData.interval} seconds.")
-                            } else if (state.interval <= 3) sound.speakText(state.interval.toString())
+                            } else if (state.interval == 5) {
+                                sound.speakText("5 secounds to go.")
+                            } else if (state.interval <= 3) {
+                                sound.speakText(state.interval.toString())
+                            }
                          }
                     }
                     sound.beep(tone)
@@ -127,41 +135,18 @@ class ExerciseActivity : AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onFinish() {
-                btnStop.text = "BACK"
-                btnPauseResume.text = "RESTART"
+                btnStop.text = resources.getString(R.string.Back)
+                btnPauseResume.text = resources.getString(R.string.Restart)
                 state.tag = "FINISHED"
 
                 Log.d("ExerciseTimer", "Finished: ${state.tag}")
-                // record
-                val sp: SharedPreferences = getSharedPreferences("records", Context.MODE_PRIVATE)
-                val editor: SharedPreferences.Editor = sp.edit()
-                val cur = LocalDateTime.now()
-
-                editor.putString(cur.toString(), "${exerciseData.event}/${exerciseData.step}/${exerciseData.grade}")
-                editor.apply()
-
+                writeRecord()
                 sound.speakText("all sets finished. well done.")
                 updateUI()
             }
         }.start()
     }
 
-    /////////////////////////////////////
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun finishExercise() {
-        sound.speakText("Finished. Well done.")
-        finish()
-
-        val msg = "Completed ${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}"
-        val args = Bundle()
-        args.putString("message", msg)
-
-        Log.d("finish", msg)
-        //val dialog = FinishedDialog()
-        //dialog.setArguments(args)
-        //dialog.show(supportFragmentManager, "NoticeDialog")
-        //finish()
-    }
     fun updateUI() {
         textMessage.text = state.tag
         textTicks.text = "Ticks: ${state.tick} / 6"
@@ -169,6 +154,24 @@ class ExerciseActivity : AppCompatActivity() {
         textMaxReps.text = "Reps: ${state.rep} / ${exerciseData.reps}"
         textMaxSets.text = "Sets: ${state.set} / ${exerciseData.sets}"
         textInterval.text = "Interval: ${state.interval} / ${exerciseData.interval}"
+    }
+    fun writeRecord() {
+        // record
+        val sp: SharedPreferences = getSharedPreferences("records", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sp.edit()
+        val cur = LocalDateTime.now()
+        //val datetimePattern = "yyyy-MM-DD HH:mm:ss"
+
+        //val formatter = DateTimeFormatter.ofPattern(datetimePattern)
+        //val formatted_time = cur.format(formatter)
+        val formatted_time = cur.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        //val formatted_time = cur.toString()
+        //val step_short: String = resources.getStringArray(R.array.push_steps_short)[exerciseData.step]
+        val msg = "${exerciseData.event}/${exerciseData.step}/${exerciseData.sets}x${exerciseData.reps}"
+        Log.d("ExerciseActity", "${formatted_time}: ${msg}")
+        editor.putString(formatted_time, msg)
+        editor.apply()
+
     }
 }
 //////////////////////////////////////////////////////////////////////

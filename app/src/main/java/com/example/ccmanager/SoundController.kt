@@ -44,7 +44,7 @@ class SoundController : TextToSpeech.OnInitListener {
     override fun onInit(stat: Int){
         if (stat == TextToSpeech.SUCCESS) {
             textToSpeech?.let { tts ->
-                val locale = Locale.US
+                val locale = Locale.US // ITALY  //US
                 if (tts.isLanguageAvailable(locale) > TextToSpeech.LANG_AVAILABLE) {
                     //tts.language = locale
                     tts.setLanguage(locale)

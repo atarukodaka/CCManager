@@ -3,5 +3,8 @@
     <string name="start">Start</string>
     <string name="Stop">STOP</string>
     <string name="Pause">PAUSE</string>
+    <string name="Resume">RESUME</string>
+    <string name="Restart">RESTART</string>
+    <string name="Back">BACK</string>
     <string name="Interval">Interval</string>
 </resources>

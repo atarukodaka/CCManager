@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Event -->
     <string-array name="events">
         <item>Push Ups</item>
         <item>Squats</item>
@@ -9,7 +10,17 @@
         <item>Headstand PUs</item>
     </string-array>
 
-    <string-array name="ps_steps">
+    <string-array name="events_abbr">
+        <item>PUSH</item>
+        <item>SQ</item>
+        <item>PULL</item>
+        <item>LEG</item>
+        <item>BR</item>
+        <item>HSPU</item>
+    </string-array>
+
+    <!-- Step -->
+    <string-array name="push_steps">
         <item>Wall Pushups</item>
         <item>Incline Pushups</item>
         <item>Kneeing Pushups</item>
@@ -35,13 +46,13 @@
         <item>One-Leg Squats</item>
     </string-array>
 
-    <string-array name="pl_steps">
+    <string-array name="pull_steps">
         <item>Vertical Pullups</item>
         <item>Horizontal Pullups</item>
         <item>Jackknife Pullups</item>
     </string-array>
 
-    <string-array name="lr_steps">
+    <string-array name="leg_steps">
         <item>Knee Tucks</item>
         <item>Flat Knee Raises</item>
         <item>Flat Bent Leg Raises</item>
@@ -55,22 +66,275 @@
         <item>Head Bridges</item>
     </string-array>
 
-    <string-array name="hs_steps">
+    <string-array name="hspu_steps">
         <item>Wall Headstands</item>
         <item>Crow Stands</item>
         <item>Wall Handstands</item>
         <item>Half Handstand PUshups</item>
     </string-array>
 
+    <!-- Grade, Volumn -->
     <string-array name="grades">
         <item>Beginner</item>
         <item>Intermidiate</item>
         <item>Senior</item>
     </string-array>
 
-    <string-array name="grades_abbr">
-        <item>BEG</item>
-        <item>INT</item>
-        <item>SNR</item>
+    <string-array name="grades_short">
+        <item>beg</item>
+        <item>int</item>
+        <item>snr</item>
+    </string-array>
+
+    <!-- Exercise Volumn -->
+    <string-array name="grade_volumns">
+        <!-- event, step, grade, sets, reps -->
+
+        <!-- *** PUSHUPS *** -->
+        <!-- push, wall -->
+        <item>0,0,0,2,3</item> <!-- TODO: for debug. shold be 1, 10 -->
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,50</item>
+        <!-- push, incline -->
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,50</item>
+        <!-- push, kneeling -->
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,15</item>
+        <item>0,0,0,3,40</item>
+        <!-- push, half -->
+        <item>0,0,0,1,8</item>
+        <item>0,0,0,2,12</item>
+        <item>0,0,0,3,25</item>
+        <!-- push, full -->
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+        <!-- push, close -->
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+        <!-- push, uneven -->
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+        <!-- push, 1/2 one-arm -->
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+        <!-- push, lever -->
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+        <!-- push, one-arm -->
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+
+        <!-- *** SQUATS *** -->
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,25</item>
+        <item>0,0,0,3,50</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,40</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,15</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,15</item>
+        <item>0,0,0,3,25</item>
+
+        <item>0,0,0,1,8</item>
+        <item>0,0,0,2,35</item>
+        <item>0,0,0,2,50</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,30</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,10</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,20</item>
+
+        <!-- *** PULL UPS *** -->
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,40</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,15</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,8</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,15</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,10</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,20</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,7</item>
+        <item>0,0,0,2,9</item>
+
+        <item>0,0,0,1,4</item>
+        <item>0,0,0,2,6</item>
+        <item>0,0,0,2,8</item>
+
+        <item>0,0,0,1,3</item>
+        <item>0,0,0,2,5</item>
+        <item>0,0,0,2,7</item>
+
+        <item>0,0,0,1,1</item>
+        <item>0,0,0,2,3</item>
+        <item>0,0,0,2,6</item>
+
+        <!-- *** LEG RAISES *** -->
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,40</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,15</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,8</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,15</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,10</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,20</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,7</item>
+        <item>0,0,0,2,9</item>
+
+        <item>0,0,0,1,4</item>
+        <item>0,0,0,2,6</item>
+        <item>0,0,0,2,8</item>
+
+        <item>0,0,0,1,3</item>
+        <item>0,0,0,2,5</item>
+        <item>0,0,0,2,7</item>
+
+        <item>0,0,0,1,1</item>
+        <item>0,0,0,2,3</item>
+        <item>0,0,0,2,6</item>
+
+        <!-- *** BRIDGES *** -->
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,40</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,15</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,8</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,15</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,10</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,20</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,7</item>
+        <item>0,0,0,2,9</item>
+
+        <item>0,0,0,1,4</item>
+        <item>0,0,0,2,6</item>
+        <item>0,0,0,2,8</item>
+
+        <item>0,0,0,1,3</item>
+        <item>0,0,0,2,5</item>
+        <item>0,0,0,2,7</item>
+
+        <item>0,0,0,1,1</item>
+        <item>0,0,0,2,3</item>
+        <item>0,0,0,2,6</item>
+
+        <!-- *** HANDSTAND PUSHUPS *** -->
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,40</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,20</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,10</item>
+        <item>0,0,0,2,15</item>
+        <item>0,0,0,3,30</item>
+
+        <item>0,0,0,1,8</item>
+        <item>0,0,0,2,10</item>
+        <item>0,0,0,2,15</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,10</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,8</item>
+        <item>0,0,0,2,20</item>
+
+        <item>0,0,0,1,5</item>
+        <item>0,0,0,2,7</item>
+        <item>0,0,0,2,9</item>
+
+        <item>0,0,0,1,4</item>
+        <item>0,0,0,2,6</item>
+        <item>0,0,0,2,8</item>
+
+        <item>0,0,0,1,3</item>
+        <item>0,0,0,2,5</item>
+        <item>0,0,0,2,7</item>
+
+        <item>0,0,0,1,1</item>
+        <item>0,0,0,2,3</item>
+        <item>0,0,0,2,6</item>
     </string-array>
 </resources>

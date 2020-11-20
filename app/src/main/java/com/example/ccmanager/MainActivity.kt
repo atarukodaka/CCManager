@@ -16,6 +16,8 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,10 +29,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var res: Resources = resources
-        res.getIdentifier("pu_steps", "arrays", getPackageName())
-        //res.getString(   )
+        // debug
+        val cur: LocalDateTime = LocalDateTime.now()
 
+        val datetimePattern = "yyyy-MM-dd HH:mm:ss"
+
+        val formatter = DateTimeFormatter.ofPattern(datetimePattern)
+        val formatted_time = cur.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        Log.d("main", formatted_time)
 
         // shared preference: interval
         val sp: SharedPreferences = getSharedPreferences(spFilename, Context.MODE_PRIVATE)
@@ -49,35 +55,21 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
-        // show records
-        var text = ""
-        val records: SharedPreferences = getSharedPreferences("records", Context.MODE_PRIVATE)
-        val map = records.all
-        records.all.forEach {
-            text += "${it.key}: ${it.value}"
+        val res_id = resources.getIdentifier("push_steps", "array", getPackageName())
+        val arr = resources.getStringArray(res_id)
+        Log.d("main", "res id: ${res_id}, data: ${arr[0]}")
 
-        }
-        //records.getString("records1", "")
-        Log.d("main", "records: ${text}")
-        textRecords.text = text
-        // spinners
-        val ar = arrayOf(R.array.ps_steps, R.array.sq_steps, R.array.pl_steps, R.array.lr_steps, R.array.br_steps, R.array.hs_steps)
+        val ar = arrayOf(R.array.push_steps, R.array.sq_steps, R.array.pull_steps, R.array.leg_steps, R.array.br_steps, R.array.hspu_steps)
         val stepAdaptors = arrayOfNulls<ArrayAdapter<CharSequence>>(ar.size)
 
         for ((index, elem) in ar.withIndex() ) {
             stepAdaptors[index] = ArrayAdapter.createFromResource(this, elem, android.R.layout.simple_dropdown_item_1line)
         }
-        //val arr = arrayOf<String>("AAA", "BBB")
-        //stepAdaptors[0] = ArrayAdapter<CharSequence>(this, android.R.layout.simple_dropdown_item_1line, arr)
 
         spinnerEvents.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 spinnerSteps.setAdapter(stepAdaptors[spinnerEvents.selectedItemPosition])
-                //spinnerSteps.setAdapter(ArrayAdapter.createFromResource(context, arrayOf("asdf", "foo"), android.R.layout.simple_dropdown_item_1line))
                 Log.d("snipperevent", "pos: ${spinnerEvents.selectedItemPosition}")
-                //val data = createExerciseDataFromSpinners()
-                //textMaxReps.text = data.reps.toString()
-                //textMaxSets.text = data.sets.toString()
                 updateUI()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -95,33 +87,23 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
-
     }
     fun updateUI(){
         val data = createExerciseDataFromSpinners()
         textMaxReps.text = "${data.reps.toString()} reps"
         textMaxSets.text = "${data.sets.toString()} sets"
     }
-    /*
-    fun updateMaxCounters() {
-        val pos_events = spinnerEvents.selectedItemPosition
-        val pos_steps = spinnerSteps.selectedItemPosition
-        val pos_grades = spinnerGrades.selectedItemPosition
-        val dataset = MaxSetsRepsDataset()
 
-        //iMaxSets = dataset.get_max_sets(pos_events, pos_steps, pos_grades)
-        //iMaxReps = dataset.get_max_reps(pos_events, pos_steps, pos_grades)
-       //Log.d("max sets reps", "sets: ${iMaxSets}, reps: ${iMaxReps}")
-    }
-
-     */
-
+    // onClickListener
     public fun buttonStart(view: View) {
         val exerciseData = createExerciseDataFromSpinners()
 
         val intent: Intent = Intent(this, ExerciseActivity::class.java)
         intent.putExtra("EXERCISE", exerciseData)
+        startActivity(intent)
+    }
+    public fun buttonRecords(view: View){
+        val intent: Intent = Intent(this, RecordActivity::class.java)
         startActivity(intent)
     }
     fun createExerciseDataFromSpinners () : ExerciseData {
@@ -135,11 +117,7 @@ class MainActivity : AppCompatActivity() {
         val pos_steps = spinnerSteps.selectedItemPosition
         val pos_grades = spinnerGrades.selectedItemPosition
 
-        //val dataset = MaxSetsRepsDataset()
-        //val sets :Int = dataset.get_max_sets(pos_events, pos_steps, pos_grades)
-        //val reps : Int = dataset.get_max_reps(pos_events, pos_steps, pos_grades)
-
-        val vol: ExerciseVolumnData? = DatasetController().find_volumn(pos_events, pos_steps, pos_grades)
+        val vol: ExerciseVolumnData? = DatasetController(this).find_volumn(pos_events, pos_steps, pos_grades)
         val sets: Int = vol?.sets ?: 0
         val reps: Int = vol?.reps ?: 0
 
