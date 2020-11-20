@@ -27,7 +27,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // debug
+        val t_step: String = DatasetController(this).step_name(0, 0)
 
+
+        val volumn = Volumn(2, 10)
+        val grade = Grade(0, "Beginner", volumn)
+        val step = Step(0, "Wall Pushups", "wall", arrayOf(grade))
+        val event = Event(0, "Push Ups", "PUSH", arrayOf(step))
+
+        val exerc = event.steps[0].grades[0]
+        Log.d("debug", "reps: ${exerc.volumn.reps}")
 
 
         // shared preference: interval

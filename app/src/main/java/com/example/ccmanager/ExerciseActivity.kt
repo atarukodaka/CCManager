@@ -42,6 +42,8 @@ class ExerciseActivity : AppCompatActivity() {
             textStep.text = exerciseData.step
             textGrade.text = exerciseData.grade
 
+            var aa: String = "asdf"
+
             Log.d("exercise", "${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}")
             Log.d("exercise", "rep: ${exerciseData.reps}, set: ${exerciseData.sets}, interval: ${exerciseData.interval}")
         }
@@ -52,6 +54,7 @@ class ExerciseActivity : AppCompatActivity() {
     // onClick
     public fun buttonStop(view: View) { // cancel timer and back to main activity
         if (::timer.isInitialized) timer.cancel()
+        //RecordController(this).clearRecords()
         finishExercise() // TODO: DEBUG
         finish()
     }
@@ -65,7 +68,7 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     /////////////////////////////////////////////////////////////////
-    fun startExerciseTimer(millis: Long = (6 + (exerciseData.reps * 6 + exerciseData.interval ) * exerciseData.sets - exerciseData.interval ).toLong()* 1000L) : CountDownTimer {
+    fun startExerciseTimer(millis: Long = (6 + (exerciseData.reps * 6 + exerciseData.interval ) * exerciseData.sets - exerciseData.interval ).toLong()* 1000L) : CountDownTimer { //TODO: total sec
         Log.d("ExerciseTimer", "millis: ${millis}")
 
         return object: CountDownTimer(millis, 1000L) {
@@ -147,15 +150,19 @@ class ExerciseActivity : AppCompatActivity() {
         Log.d("ExerciseTimer", "Finished: ${state.tag}")
 
         val curr = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val formatted = curr.format(formatter)
-        val msg = arrayOf<String>(formatted,
-                exerciseData.event_id.toString(), exerciseData.event,
-                exerciseData.step_id.toString(), exerciseData.step,
-                exerciseData.grade_id.toString(), exerciseData.grade,
-                exerciseData.sets.toString(), exerciseData.reps.toString()
-        ).joinToString(",")
-        RecordController(this).addRecord(msg + "\n")
+        /*
+       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+       val formatted = curr.format(formatter)
+       val msg = arrayOf<String>(formatted,
+               exerciseData.event_id.toString(), exerciseData.event,
+               exerciseData.step_id.toString(), exerciseData.step,
+               exerciseData.grade_id.toString(), exerciseData.grade,
+               exerciseData.sets.toString(), exerciseData.reps.toString()
+       ).joinToString(",")
+       //RecordController(this).addRecord(msg + "\n")
+
+        */
+        RecordController(this).addRecord(curr, exerciseData)
 
         sound.speakText("all sets finished. well done.")
         updateUI()

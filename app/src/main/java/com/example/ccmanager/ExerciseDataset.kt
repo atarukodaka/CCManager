@@ -19,9 +19,26 @@ data class ExerciseData (
 
 data class ExerciseVolumnData(val event: Int, val step: Int, val grade: Int, val sets: Int, val reps: Int)
 
+data class Event (var id: Int, var name: String, var abbr: String, var steps: Array<Step>)
+data class Step ( var id: Int, var name: String, var short: String, var grades: Array<Grade>)
+data class Grade(var id: Int, var name: String, var volumn: Volumn)
+data class Volumn(var sets: Int, var reps: Int)
+data class Exercise(var event: Event, var step: Step, var grade: Grade)
+
+
 class DatasetController (var context: Context) {
     fun createExerciseData(event_id: Int, step_id: Int, grade_id: Int, interval: Int, sets: Int, reps: Int){
         //val event = context.resources.getStringArray(R.s)
+    }
+    fun event_name(id: Int){
+        context.resources.getStringArray(R.array.events)[id]    // TODO: over flow check
+    }
+    fun step_name(event_id: Int, step_id: Int) : String {
+        //resources.getIdentifier("push_steps", "array", getPackageName())
+        val step_abbr: String = context.resources.getStringArray(R.array.events_abbr)[event_id] // TODO: overflow
+        val resource_id: Int = context.resources.getIdentifier("${step_abbr.toLowerCase()}_steps", "array", context.getPackageName())
+        val arr: Array<String> = context.resources.getStringArray(resource_id)
+        return arr[step_id]
     }
     fun find_volumn  (event: Int, step: Int, grade: Int) : ExerciseVolumnData? {
         Log.d("ExerciseDataset", "given/event: ${event}, step: ${step}, grade: ${grade}")
