@@ -57,29 +57,6 @@ class ExerciseActivity : AppCompatActivity() {
 
         Log.d("ExerciseActivity", "get intent: ${task.event.name} / ${task.step.name} / ${task.grade.name} with interval ${interval}")
 
-        /*
-        val data = intent.getSerializableExtra("ExerciseTask")
-
-        if (data is ExerciseTask){
-            task = data
-
-            Log.d("ExerciseActivity", "${task.event.name} / ${task.step.name} / ${task.grade.name}")
-            totalSec = readyCount + (task.volumn.reps * tickCount + task.interval) * task.volumn.sets - task.interval
-        }
-
-        val data = intent.getSerializableExtra("EXERCISE")
-        if (data is ExerciseData) {
-            exerciseData = data
-            textEvent.text = exerciseData.event
-            textStep.text = exerciseData.step
-            textGrade.text = exerciseData.grade
-
-            Log.d("exercise", "${exerciseData.event} / ${exerciseData.step} / ${exerciseData.grade}")
-            Log.d("exercise", "rep: ${exerciseData.reps}, set: ${exerciseData.sets}, interval: ${exerciseData.interval}")
-        }
-
-         */
-        //timer = startReadyTimer()
         timer = startExerciseTimer()
     }
     ///////////////////////////
@@ -186,20 +163,7 @@ class ExerciseActivity : AppCompatActivity() {
 
         val curr_datetime = LocalDateTime.now()
         RecordController(this).addRecord(curr_datetime, task)
-        //val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        //val formatted_datetime = curr.format(formatter)
 
-        /*
-
-       val msg = arrayOf<String>(formatted,
-               exerciseData.event_id.toString(), exerciseData.event,
-               exerciseData.step_id.toString(), exerciseData.step,
-               exerciseData.grade_id.toString(), exerciseData.grade,
-               exerciseData.sets.toString(), exerciseData.reps.toString()
-       ).joinToString(",")
-       //RecordController(this).addRecord(msg + "\n")
-
-        */
         //RecordController(this).addRecord(curr, task) // TODO: record task
 
         sound.speakText("all sets finished. well done.")

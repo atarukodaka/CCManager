@@ -49,6 +49,13 @@
         <item>Vertical Pullups</item>
         <item>Horizontal Pullups</item>
         <item>Jackknife Pullups</item>
+        <item>Half Pullups</item>
+        <item>Full Pullups</item>
+        <item>Close Pullups</item>
+        <item>Uneven Pullups</item>
+        <item>1/2 One-Arm Pullups</item>
+        <item>Assited One-Arm Pullups</item>
+        <item>One-Arm Pullups</item>
     </string-array>
 
     <string-array name="leg_steps">
@@ -56,6 +63,12 @@
         <item>Flat Knee Raises</item>
         <item>Flat Bent Leg Raises</item>
         <item>Flat Frog Raises</item>
+        <item>Flag Straight Leg Raises</item>
+        <item>Hanging Knee Raises</item>
+        <item>Hanging Bent Leg Raises</item>
+        <item>Hanging Frog Raises</item>
+        <item>Partial Straight Leg Raises</item>
+        <item>Hanging Straight Leg Raises</item>
     </string-array>
 
     <string-array name="br_steps">
@@ -63,13 +76,27 @@
         <item>Straight Bridges</item>
         <item>Angled Bridges</item>
         <item>Head Bridges</item>
+        <item>Half Bridges</item>
+        <item>Full Bridges</item>
+        <item>Wall Walking Bridges (Down)</item>
+        <item>Wall Walking Bridges (Up)</item>
+        <item>Closing Bridges</item>
+        <item>Stand-toStand Bridges</item>
+
     </string-array>
 
     <string-array name="hspu_steps">
         <item>Wall Headstands</item>
-        <item>Crow Stands</item>
-        <item>Wall Handstands</item>
+        <item>Crow Handstand</item>
+        <item>Wall Handstand</item>
         <item>Half Handstand Pushups</item>
+        <item>Handstand Pushups</item>
+        <item>Close Handstand Pushups</item>
+        <item>Uneven Handstand Pushups</item>
+        <item>1/2 One-Arm Handstand Pushups</item>
+        <item>Lever Handstand Pushups</item>
+        <item>One-Arm Handstand Pushups</item>
+
     </string-array>
 
     <!-- Grade, Volumn -->
@@ -161,5 +188,4 @@
         <item>1,10,2,20,3,50</item>
         <item>1,10,2,20,3,50</item>
     </string-array>
-
 </resources>

@@ -51,13 +51,33 @@ class MainActivity : AppCompatActivity() {
         val res_id = resources.getIdentifier("push_steps", "array", getPackageName())
         val arr = resources.getStringArray(res_id)
         Log.d("main", "res id: ${res_id}, data: ${arr[0]}")
+        val stepAdaptors = arrayListOf<ArrayAdapter<CharSequence>>()
 
+        val controller = ExerciseController(this)
+
+        /*
+        controller.events.forEach {event ->
+            val texts = arrayListOf<String>()
+            controller.select_steps_by_event(event).forEach {
+                texts.add(it.name)
+            }
+            stepAdaptors.add(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, texts as List<CharSequence>))
+        }
+
+         */
+        //stepAdaptors.add(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, arrayOf<String>("AAA", "BBB")))
+        //stepAdaptors.add(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, arrayOf<String>("AAA", "BBB")))
+        //stepAdaptors.add(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, arrayOf<String>("AAA", "BBB")))
+
+        /*
         val ar = arrayOf(R.array.push_steps, R.array.sq_steps, R.array.pull_steps, R.array.leg_steps, R.array.br_steps, R.array.hspu_steps)
         val stepAdaptors = arrayOfNulls<ArrayAdapter<CharSequence>>(ar.size)
 
         for ((index, elem) in ar.withIndex() ) {
             stepAdaptors[index] = ArrayAdapter.createFromResource(this, elem, android.R.layout.simple_dropdown_item_1line)
         }
+
+         */
 
         spinnerEvents.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
