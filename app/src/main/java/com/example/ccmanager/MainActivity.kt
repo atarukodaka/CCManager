@@ -27,17 +27,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // debug
-        val t_step: String = DatasetController(this).step_name(0, 0)
+        //val t_step: String = DatasetController(this).step_name(0, 0)
 
-
-        val volumn = Volumn(2, 10)
-        val grade = Grade(0, "Beginner", volumn)
-        val step = Step(0, "Wall Pushups", "wall", arrayOf(grade))
-        val event = Event(0, "Push Ups", "PUSH", arrayOf(step))
-
-        val exerc = event.steps[0].grades[0]
-        Log.d("debug", "reps: ${exerc.volumn.reps}")
-
+        // task
 
         // shared preference: interval
         val sp: SharedPreferences = getSharedPreferences(spFilename, Context.MODE_PRIVATE)
@@ -90,17 +82,46 @@ class MainActivity : AppCompatActivity() {
         }
     }
     fun updateUI(){
-        val data = createExerciseDataFromSpinners()
-        textMaxReps.text = "${data.reps.toString()} reps"
-        textMaxSets.text = "${data.sets.toString()} sets"
+        //val data = createExerciseDataFromSpinners()
+        //textMaxReps.text = "${data.reps.toString()} reps"
+        //textMaxSets.text = "${data.sets.toString()} sets"
+
+        val ctrl = ExerciseController(this)
+
+        val volumn = ctrl.find_volumn(spinnerEvents.selectedItemPosition,
+                spinnerSteps.selectedItemPosition,
+                spinnerGrades.selectedItemPosition)
+        if (volumn != null) {
+            Log.d("MainActivity", "volumn: ${volumn.sets} x ${volumn.reps}")
+            textMaxReps.text = "${volumn.reps.toString()} reps"
+            textMaxSets.text = "${volumn.sets.toString()} sets"
+        }
     }
 
     // onClickListener
     public fun buttonStart(view: View) {
-        val exerciseData = createExerciseDataFromSpinners()
 
+        //val exerciseData = createExerciseDataFromSpinners()
+        //val task = ctrl.create_task(spinnerEvents.selectedItemPosition, spinnerSteps.selectedItemPosition,spinnerGrades.selectedItemPosition )
+
+        //val event = ctrl.events[spinnerEvents.selectedItemPosition]
+        //val step = ctrl.steps[spinnerSteps.selectedItemPosition]
+        //val grade = ctrl.grades[spinnerGrades.selectedItemPosition]
+        //val volumn = ctrl.find_volumn(event, step, grade)
+        //val interval: Int = editTextInterval.text.toString().toIntOrNull() ?: 0
+
+        //val task = ExerciseTask(event, step, grade, volumn, interval)
+
+
+        //intent.putExtra("ExerciseTask", task)
+
+        //intent.putExtra("EXERCISE", exerciseData)
         val intent: Intent = Intent(this, ExerciseActivity::class.java)
-        intent.putExtra("EXERCISE", exerciseData)
+        intent.putExtra("event_number", spinnerEvents.selectedItemPosition)
+        intent.putExtra("step_number", spinnerSteps.selectedItemPosition)
+        intent.putExtra("grade_number", spinnerGrades.selectedItemPosition)
+        intent.putExtra("interval", editTextInterval.text.toString().toIntOrNull() ?: 0)
+
         startActivity(intent)
     }
     public fun buttonRecords(view: View){

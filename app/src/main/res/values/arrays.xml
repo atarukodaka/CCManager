@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="events_raw">
+        <item>1,Push Ups,PUSH</item>
+    </string-array>
+
+    <string-array name="steps_raw">
+        <item>1,1,Wall Pushups,wall,2,3,2,10,3,50</item>
+        <item>1,2,Incline Pushups,incline,1,10,2,10,3,40</item>
+        <item>1,3,Kneeling PUshups,knee,1,10,2,10,3,40</item>
+    </string-array>
+
+    <string-array name="grades_raw">
+        <item>1,Beginner,beg</item>
+        <item>2,Intermidiate,int</item>
+        <item>3,Senior,snr</item>
+    </string-array>
+    <!-- ****************************************** -->
     <!-- Event -->
     <string-array name="events">
         <item>Push Ups</item>
