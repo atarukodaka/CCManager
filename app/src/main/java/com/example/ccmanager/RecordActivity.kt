@@ -28,8 +28,8 @@ class RecordActivity : AppCompatActivity() {
         var strRecords: String = ""
         rec.loadRecords().forEach() {
             //val tv = TextView(this)
-            val ex = it.exerciseData
-            strRecords += "${it.datetime.format(RecordController.datetimeFormatter)}: ${ex.event} s${ex.step_id+1} ${ex.step} ${ex.sets}x${ex.reps}"
+
+            strRecords += "${it.datetime.format(RecordController.datetimeFormatter)}: ${it.task.event.name} s${it.task.step.number} ${it.task.step.name} ${it.task.volumn.sets}x${it.task.volumn.reps}\n"
 
             //tv.text = "${it.datetime.format(RecordController.datetimeFormatter)}: ${ex.event} s${ex.step_id+1} ${ex.step} ${ex.sets}x${ex.reps}"
             //layoutRecords.addView(tv)
@@ -40,8 +40,8 @@ class RecordActivity : AppCompatActivity() {
         var strTodaySummary: String = ""
         rec.loadRecords().forEach() {
             if (true) { // TODO
-                val ex = it.exerciseData
-                strTodaySummary += "${ex.event} s${ex.step_id+1} ${ex.step} ${ex.sets}x${ex.reps}\n"
+
+                strTodaySummary += "${it.task.event.name} s${it.task.step.number} ${it.task.step.name} ${it.task.volumn.sets}x${it.task.volumn.reps}\n"
                 //val tv = TextView(this)
                 //val ex = it.exerciseData
                 //tv.text = "${ex.event} s${ex.step_id+1} ${ex.step} ${ex.sets}x${ex.reps}"
@@ -69,7 +69,7 @@ class RecordActivity : AppCompatActivity() {
 }
 ///////////////////////////////////////////////////////////
 class RecordController (var context: Context) {
-    class Item (var datetime: LocalDateTime, var exerciseData: ExerciseData)
+    class Item (var datetime: LocalDateTime, var task: ExerciseTask)
 
     private var fileName: String = "records.csv"
     private var recordFile: File = File(context.filesDir, fileName)
@@ -80,19 +80,23 @@ class RecordController (var context: Context) {
 
     //fun addRecord(contents: String){
     fun addRecord(item: Item){
-        addRecord(item.datetime, item.exerciseData)
+        addRecord(item.datetime, item.task)
     }
-    fun addRecord(datetime: LocalDateTime, exerciseData: ExerciseData){
+    fun addRecord(datetime: LocalDateTime, task: ExerciseTask){
 
         //context.openFileOutput(fileName, Context.MODE_APPEND).use {
         //val formatter = DateTimeFormatter.ofPattern(datetimePattern)
         val formatted = datetime.format(datetimeFormatter)
 
         val contents = arrayOf<String>(formatted,
+                task.event.number.toString(), task.step.number.toString(), task.grade.number.toString()
+        /*
                 exerciseData.event_id.toString(), exerciseData.event,
                 exerciseData.step_id.toString(), exerciseData.step,
                 exerciseData.grade_id.toString(), exerciseData.grade,
                 exerciseData.sets.toString(), exerciseData.reps.toString()
+
+         */
         ).joinToString(",")
         recordFile.appendText(contents + "\n")
             //it.write(contents.toByteArray())
@@ -111,9 +115,9 @@ class RecordController (var context: Context) {
                 try {
                     val arr = it.split(',')
                     val dateTime = LocalDateTime.parse(arr[0], DateTimeFormatter.ofPattern(datetimePattern))
-                    val exerciseData = ExerciseData(arr[1].toInt(), arr[2], arr[3].toInt(), arr[4], arr[5].toInt(), arr[6], 0, arr[7].toInt(), arr[8].toInt()) // TODO: array overflow
-
-                    records.add(Item(dateTime, exerciseData))
+                    //val exerciseData = ExerciseData(arr[1].toInt(), arr[2], arr[3].toInt(), arr[4], arr[5].toInt(), arr[6], 0, arr[7].toInt(), arr[8].toInt()) // TODO: array overflow
+                    val task = ExerciseController(context).create_task(arr[1].toInt()-1, arr[2].toInt()-1, arr[3].toInt()-1)
+                    records.add(Item(dateTime, task))
                 } catch (e: RuntimeException) {
                     Log.d("RecordActivity", "ERROR: ${e.toString()}")
                     // TODO: catch error on loading records

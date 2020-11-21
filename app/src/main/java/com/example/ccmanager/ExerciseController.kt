@@ -4,40 +4,65 @@ import android.content.Context
 import android.content.res.Resources
 import android.util.Log
 
-//data class ExerciseTaskSerializable (var event_number: Int, var step_number: Int, var grade_number: Int, var sets: Int, var reps: Int, var interval: Int): java.io.Serializable
 class ExerciseTask (var event: Event, var step: Step, var grade: Grade, var volumn: Volumn)
-
-
-data class ExerciseData (
-        var event_id: Int,
-        var event: String,
-        var step_id: Int,
-        var step: String,
-        var grade_id: Int,
-        var grade: String,
-
-        var interval: Int = 10,
-        var sets: Int = 3,
-        var reps: Int = 10,
-) : java.io.Serializable
-
-data class ExerciseVolumnData(val event: Int, val step: Int, val grade: Int, val sets: Int, val reps: Int) : java.io.Serializable
 
 data class Event (var number: Int, var name: String, var short: String)
 data class Step (var number: Int, var name: String, var short: String, var event: Event)
 data class Grade(var number: Int, var name: String, var short: String)
-//data class Volumn(var sets: Int, var reps: Int)
-//data class Volumn(var sets: Int, var reps: Int)
 data class Volumn(var event: Event, var step: Step, var grade: Grade, var sets: Int, var reps: Int)
 
 class ExerciseController (context: Context) {
-    lateinit var events: Array<Event>
-    lateinit var steps: Array<Step>
-    lateinit var grades: Array<Grade>
-    lateinit var volumns: Array<Volumn>
+    var events = arrayListOf<Event>()
+    var steps = arrayListOf<Step>()
+    var grades = arrayListOf<Grade>()
+    var volumns = arrayListOf<Volumn>()
 
     init {
-        events = arrayOf(
+        val res = context.resources
+        val events_short = res.getStringArray(R.array.events_short)
+
+        res.getStringArray(R.array.events).forEachIndexed { index, s ->
+            val short_name = events_short[index]
+            Log.d("ExerciseController", "Register Event: ${index}: ${s} / ${short_name}")
+            events.add(Event(index+1, s, short_name))
+        }
+        // steps
+        val arr = arrayOf(R.array.push_steps, R.array.sq_steps, R.array.pull_steps, R.array.leg_steps, R.array.br_steps, R.array.hspu_steps)
+
+        events.forEach { event ->
+            //  val res_id = resources.getIdentifier("push_steps", "array", getPackageName())
+            val res_id = res.getIdentifier("${event.short}_steps", "array", context.getPackageName() )
+
+            res.getStringArray(res_id).forEachIndexed { i, s ->
+                Log.d("ExerciseController", "Register Step: ${i}: ${s} on ${event.name}")
+                steps.add(Step(i+1, s, "foo", event))
+            }
+        }
+        // grades
+        res.getStringArray(R.array.grades).forEachIndexed { index, s ->
+            grades.add(Grade(index+1, s, "foo"))
+        }
+        // volumns
+        events.forEach { event ->
+            val res_id = res.getIdentifier("${event.short}_volumns", "array", context.getPackageName() )
+
+            res.getStringArray(res_id).forEachIndexed { i, s ->
+                Log.d("ExerciseController", "Register Volumn: ${i}: ${s} on ${event.name}")
+                val arr = s.split(",")
+                val step = find_step(event.number-1, i)
+                volumns.add(Volumn(event, step, grades[0], arr[0].toInt(), arr[1].toInt()))
+                volumns.add(Volumn(event, step, grades[1], arr[2].toInt(), arr[3].toInt()))
+                volumns.add(Volumn(event, step, grades[2], arr[4].toInt(), arr[5].toInt()))
+            }
+        }
+        context.resources.getStringArray(R.array.push_volumns).forEachIndexed { index, s ->
+            val arr = s.split(",")
+//            volumns.add(Volumn(events[0], steps[index], grades[0], arr[0].toInt(), arr[1].toInt()))
+//            volumns.add(Volumn(events[0], steps[index], grades[1], arr[2].toInt(), arr[3].toInt()))
+//            volumns.add(Volumn(events[0], steps[index], grades[2], arr[4].toInt(), arr[5].toInt()))
+        }
+        /*
+        val __events = arrayListOf(
                 Event(1, "Push Ups", "push"),
                 Event(2, "Squats", "sq"),
                 Event(3, "Pull Ups", "pull"),
@@ -45,6 +70,9 @@ class ExerciseController (context: Context) {
                 Event(5, "Bridges", "br"),
                 Event(6, "Handstand PUs", "hspu"),
         )
+
+
+
         steps = arrayOf(
                 Step(1, "Wall Pushup", "wall", events[0]),
                 Step(2, "Incline Pushup", "incl", events[0]),
@@ -63,6 +91,8 @@ class ExerciseController (context: Context) {
                 Grade(3, "Senior", "snr"),
 
         )
+
+
         volumns = arrayOf(
                 Volumn(events[0], steps[0], grades[0],2, 3),
                 Volumn(events[0], steps[0], grades[1],2, 20),
@@ -76,6 +106,8 @@ class ExerciseController (context: Context) {
                 Volumn(events[0], steps[2], grades[1],2, 20),
                 Volumn(events[0], steps[2], grades[2],3, 50),
         )
+
+         */
     }
     fun create_task (event_number: Int, step_number: Int, grade_number: Int) : ExerciseTask {
         val event = events[event_number]
@@ -84,13 +116,26 @@ class ExerciseController (context: Context) {
         val volumn = find_volumn(event, step, grade)
         return ExerciseTask(event, step, grade, volumn)
     }
+    fun find_step(event_no: Int, step_no: Int) : Step {
+        val event = events[event_no]
+        steps.forEach {
+            if (it.event == event && it.number == step_no){
+                return it
+            }
+        }
+        return steps[0]  // TODO: DEBUG ONLY
+    }
     fun find_volumn(event_no: Int, step_no: Int, grade_no: Int) : Volumn {
+        return find_volumn(events[event_no], find_step(event_no, step_no), grades[grade_no])
         //try {
+        /*
             val event = events[event_no] // TODO: overflow check
             val step = steps[event_no * 10 + step_no]
             val grade = grades[grade_no]
 
             return find_volumn(event, step, grade)
+
+         */
         //} catch (e: ArrayIndexOutOfBoundsException) {
         //    Log.d("ExerciseDataset", "ERROR: ${e.toString()}")
         //    return null
@@ -104,10 +149,12 @@ class ExerciseController (context: Context) {
                 return it
             }
         }
-        throw Exception("volumn not found")
+        //throw Exception("volumn not found: ${event.number}/${step.number}/${grade.number}") // TODO:
+        Log.d("ExerciseDataset", "Volumn not found: ${event.number} / ${step.number} / ${grade.number}")
+        return volumns[0]  // TODO: just for debug
     }
 }
-
+/*
 class DatasetController (var context: Context) {
     fun createExerciseData(event_id: Int, step_id: Int, grade_id: Int, interval: Int, sets: Int, reps: Int){
         //val event = context.resources.getStringArray(R.s)
@@ -141,3 +188,6 @@ class DatasetController (var context: Context) {
         return ExerciseVolumnData(event, step, grade, sets, reps)
     }
 }
+
+
+ */

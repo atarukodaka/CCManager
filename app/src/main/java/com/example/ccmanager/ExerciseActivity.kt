@@ -184,10 +184,13 @@ class ExerciseActivity : AppCompatActivity() {
 
         Log.d("ExerciseTimer", "Finished: ${state.tag}")
 
-        val curr = LocalDateTime.now()
+        val curr_datetime = LocalDateTime.now()
+        RecordController(this).addRecord(curr_datetime, task)
+        //val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        //val formatted_datetime = curr.format(formatter)
+
         /*
-       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-       val formatted = curr.format(formatter)
+
        val msg = arrayOf<String>(formatted,
                exerciseData.event_id.toString(), exerciseData.event,
                exerciseData.step_id.toString(), exerciseData.step,
@@ -197,7 +200,7 @@ class ExerciseActivity : AppCompatActivity() {
        //RecordController(this).addRecord(msg + "\n")
 
         */
-        // RecordController(this).addRecord(curr, task) // TODO: record task
+        //RecordController(this).addRecord(curr, task) // TODO: record task
 
         sound.speakText("all sets finished. well done.")
         updateUI()
