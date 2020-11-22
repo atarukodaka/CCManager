@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 ////////////////////////////////////////////////////////////////////////////////
 class MainActivity : AppCompatActivity() {
     val spFilename = "ccmanager_preference"
+    var state_steps = arrayOf<Int>(0,0,0,0,0,0)
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         val res_id = resources.getIdentifier("push_steps", "array", getPackageName())
         val arr = resources.getStringArray(res_id)
         Log.d("main", "res id: ${res_id}, data: ${arr[0]}")
-        val stepAdaptors = arrayListOf<ArrayAdapter<CharSequence>>()
+        //val stepAdaptors = arrayListOf<ArrayAdapter<CharSequence>>()
 
         val controller = ExerciseController(this)
 
@@ -69,26 +70,27 @@ class MainActivity : AppCompatActivity() {
         //stepAdaptors.add(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, arrayOf<String>("AAA", "BBB")))
         //stepAdaptors.add(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, arrayOf<String>("AAA", "BBB")))
 
-        /*
+
         val ar = arrayOf(R.array.push_steps, R.array.sq_steps, R.array.pull_steps, R.array.leg_steps, R.array.br_steps, R.array.hspu_steps)
         val stepAdaptors = arrayOfNulls<ArrayAdapter<CharSequence>>(ar.size)
 
-        for ((index, elem) in ar.withIndex() ) {
-            stepAdaptors[index] = ArrayAdapter.createFromResource(this, elem, android.R.layout.simple_dropdown_item_1line)
+        ar.forEachIndexed {i, res_id ->
+        //for ((index, elem) in ar.withIndex() ) {
+            stepAdaptors[i] = ArrayAdapter.createFromResource(this, res_id, android.R.layout.simple_dropdown_item_1line)
         }
-
-         */
 
         spinnerEvents.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 spinnerSteps.setAdapter(stepAdaptors[spinnerEvents.selectedItemPosition])
                 Log.d("snipperevent", "pos: ${spinnerEvents.selectedItemPosition}")
+                spinnerSteps.setSelection(state_steps[position])
                 updateUI()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         spinnerSteps.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                state_steps[spinnerEvents.selectedItemPosition] = position
                 updateUI()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}

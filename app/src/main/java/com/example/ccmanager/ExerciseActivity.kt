@@ -1,7 +1,6 @@
 package com.example.ccmanager
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,11 +9,8 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_exercise.*
-import java.io.Serializable
 import java.lang.Math.round
-import java.sql.Time
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 //////////////////////////////////////////////////////////////////
@@ -27,7 +23,7 @@ class ExerciseActivity : AppCompatActivity() {
     lateinit var task: ExerciseTask
     var interval: Int = 0
     var state = ExerciseState()
-    var sound = SoundController()
+    val sound = SoundController()
     var millisResume : Long = 0
     var totalSec: Int = 0
     var readyCount = 6
@@ -39,7 +35,7 @@ class ExerciseActivity : AppCompatActivity() {
         setContentView(R.layout.activity_exercise)
 
         //sound.initialize(this)
-        sound.initialize(this)
+        sound.initialize(context = this)
 
         // retrieve exercise data
         val ctrl = ExerciseController(this)
@@ -50,9 +46,12 @@ class ExerciseActivity : AppCompatActivity() {
         )
         interval = intent.getIntExtra("interval", 0)
 
-        textEvent.text = task.event.name
-        textStep.text = task.step.name
-        textGrade.text = task.grade.name
+        //textEvent.text = task.event.name
+        textEvent.text = "${task.event.name} / s${task.step.number}: ${task.step.name}"
+        //textStep.text = task.step.name
+        //textGrade.text = task.grade.name
+        textGrade.text = "${task.grade.name}: ${task.volumn.sets}x${task.volumn.reps}"
+
         totalSec = readyCount + (task.volumn.reps * tickCount + interval) * task.volumn.sets - interval
 
         Log.d("ExerciseActivity", "get intent: ${task.event.name} / ${task.step.name} / ${task.grade.name} with interval ${interval}")
@@ -68,10 +67,14 @@ class ExerciseActivity : AppCompatActivity() {
         finish()
     }
     public fun buttonPauseResume(view: View) {
+
         btnPauseResume.text = resources.getString(R.string.Pause)
         when (state.tag){
             "PAUSE" -> timer = startExerciseTimer(millisResume)
-            "FINISHED" -> timer = startExerciseTimer()
+            "FINISHED" -> {
+                state.reset()
+                timer = startExerciseTimer()
+            }
             else -> state.tag = "PAUSING"
         }
     }
@@ -91,8 +94,6 @@ class ExerciseActivity : AppCompatActivity() {
                     cancel()
                     millisResume = millisUntilFinished
                 } else {
-                    val readyCount = 6
-                    val tickCount = 6
                     val remaining_sec: Int = round(millisUntilFinished.toDouble() / 1000).toInt()
                     //val total_sec = readyCount + (exerciseData.reps * 6 + exerciseData.interval) * exerciseData.sets - exerciseData.interval
                     val elapse_sec = totalSec - remaining_sec - readyCount
@@ -110,13 +111,13 @@ class ExerciseActivity : AppCompatActivity() {
                         sound.speakText(text)
                     } else {
                         state.tag = "RUNNING"
-                        state.set = (elapse_sec / (6 * task.volumn.reps + interval)).toInt() + 1
-                        val mod = (elapse_sec % (6 * task.volumn.reps + interval))
+                        state.set = (elapse_sec / (tickCount * task.volumn.reps + interval)).toInt() + 1
+                        val mod = (elapse_sec % (tickCount * task.volumn.reps + interval))
 
                         if (mod < 6 * task.volumn.reps) {
                             state.tag = "RUNNING"
-                            state.tick = (mod % 6) + 1
-                            state.rep = (mod / 6).toInt() + 1
+                            state.tick = (mod % tickCount) + 1
+                            state.rep = (mod / tickCount).toInt() + 1
                             if (state.tick == 1) {
                                 if (state.rep == 1){
                                     sound.speakText("set ${state.set} start")
@@ -127,13 +128,13 @@ class ExerciseActivity : AppCompatActivity() {
                             }
                         } else {
                             state.tag = "INTERVAL"
-                            state.interval = interval + 1 - (mod - 6 * task.volumn.reps + 1)
+                            state.interval = interval - (mod - 6 * task.volumn.reps )
 
                             if (state.interval == interval) {
                                 tone = "high"
                                 sound.speakText("set ${state.set} done. interval of ${interval} seconds.")
-                            } else if (state.interval == 5) {
-                                sound.speakText("5 secounds to go.")
+                            } else if (state.interval % 10 == 0) {
+                                sound.speakText("${state.interval} secounds to go.")
                             } else if (state.interval <= 3) {
                                 sound.speakText(state.interval.toString())
                             }
@@ -142,7 +143,7 @@ class ExerciseActivity : AppCompatActivity() {
                     sound.beep(tone)
 
                     val msg = "[${state.tag}] remaining_sec: ${remaining_sec}, elapse_sec: ${elapse_sec}, set: ${state.set}, interval: ${state.interval}, rep: ${state.rep}, tick: ${state.tick}"
-                    textMessage.text = msg
+                    textStatus.text = msg
                     Log.d("ExerciseTimer", msg)
                 }
                 updateUI()
@@ -157,6 +158,7 @@ class ExerciseActivity : AppCompatActivity() {
     fun finishExercise(){
         btnStop.text = resources.getString(R.string.Back)
         btnPauseResume.text = resources.getString(R.string.Restart)
+
         state.tag = "FINISHED"
 
         Log.d("ExerciseTimer", "Finished: ${state.tag}")
@@ -169,13 +171,42 @@ class ExerciseActivity : AppCompatActivity() {
         sound.speakText("all sets finished. well done.")
         updateUI()
     }
+
     fun updateUI() {
-        textMessage.text = state.tag
+        textStatus.text = state.tag
         textTicks.text = "Ticks: ${state.tick} / 6"
         textReady.text = "Ready: ${state.ready }"
         textMaxReps.text = "Reps: ${state.rep} / ${task.volumn.reps}"
         textMaxSets.text = "Sets: ${state.set} / ${task.volumn.sets}"
         textInterval.text = "Interval: ${state.interval} / ${interval}"
+
+        // progress bar
+        progressBarTicks.max = 6
+        progressBarTicks.setProgress(state.tick)
+
+        progressBarReps.max = task.volumn.reps
+        progressBarReps.setProgress(state.rep)
+
+        progressBarSets.max = task.volumn.sets
+        progressBarSets.setProgress(state.set)
+
+        if (state.tag == "INTERVAL") {
+            progressBarInterval.max = interval
+            progressBarInterval.setProgress(interval - state.interval)
+        } else {
+            progressBarInterval.setProgress(0)
+        }
+
+        // status color
+        val color =
+                when (state.tag) {
+                    "RUNNING" ->Color.GREEN
+                    "PAUSE" -> Color.GRAY
+                    "READY" -> Color.YELLOW
+                    "INTERVAL" -> Color.YELLOW
+                    else -> Color.WHITE
+                }
+        layoutState.setBackgroundColor(color)
     }
 }
 //////////////////////////////////////////////////////////////////////
@@ -183,4 +214,8 @@ data class ExerciseState (
         var tick: Int = 0, var rep: Int = 0, var set: Int = 0,
         var interval: Int = 0, var ready: Int = 0,
         var tag: String = "NOT_STARTED"
-)
+){
+    fun reset () {
+        tick = 0; rep = 0; set = 0; interval = 0; ready = 0; tag = "NOT_STARTED"
+    }
+}
