@@ -3,6 +3,7 @@ package com.example.ccmanager
 import android.content.Context
 import android.content.res.Resources
 import android.util.Log
+import java.lang.Exception
 
 class ExerciseTask (var event: Event, var step: Step, var grade: Grade, var volumn: Volumn)
 
@@ -47,34 +48,44 @@ class ExerciseController (context: Context) {
             val res_id = res.getIdentifier("${event.short}_volumns", "array", context.getPackageName() )
 
             res.getStringArray(res_id).forEachIndexed { i, s ->
-                Log.d("ExerciseController", "Register Volumn: ${i}: ${s} on ${event.name}")
+
                 val arr = s.split(",")
-                val step = find_step(event.number-1, i)
+                val step = find_step(event.number, i+1)
+                Log.d("ExerciseController", "Register Volumn: ${i}: ${s} on ${event.name}/${step.name}")
                 volumns.add(Volumn(event, step, grades[0], arr[0].toInt(), arr[1].toInt()))
                 volumns.add(Volumn(event, step, grades[1], arr[2].toInt(), arr[3].toInt()))
                 volumns.add(Volumn(event, step, grades[2], arr[4].toInt(), arr[5].toInt()))
             }
         }
         context.resources.getStringArray(R.array.push_volumns).forEachIndexed { index, s ->
-            val arr = s.split(",")
+            //val arr = s.split(",")
 
         }
     }
     fun create_task (event_number: Int, step_number: Int, grade_number: Int) : ExerciseTask {
-        val event = events[event_number]
-        val step = steps[step_number]
-        val grade =  grades[grade_number]
+        val event = find_event(event_number)
+        val step = find_step(event_number, step_number)
+        val grade =  find_grade(grade_number)
         val volumn = find_volumn(event, step, grade)
         return ExerciseTask(event, step, grade, volumn)
     }
+    fun find_event(event_no: Int) : Event {
+        events.forEach { event ->
+            if (event.number == event_no) return event
+        }
+        throw Exception("no such event: ${event_no}")
+    }
     fun find_step(event_no: Int, step_no: Int) : Step {
-        val event = events[event_no]
-        steps.forEach {
-            if (it.event == event && it.number == step_no){
-                return it
+        var event = find_event(event_no)
+        //val event = events[event_no]
+        steps.forEach { step ->
+            if (step.event == event && step.number == step_no){
+                Log.d("ExerciseController", "find step (${event_no}, ${step_no}) ->  ${event.name} / ${step.name}")
+                return step
             }
         }
-        return steps[0]  // TODO: DEBUG ONLY
+        throw Exception("ERROR! no step found: event: ${event_no} / step: ${step_no}")
+        //return steps[0]  // TODO: DEBUG ONLY
     }
     fun select_steps_by_event(event: Event) : ArrayList<Step>{
         val arr = arrayListOf<Step>()
@@ -84,9 +95,14 @@ class ExerciseController (context: Context) {
         }
         return arr
     }
+    fun find_grade(grade_no: Int) : Grade {
+        grades.forEach { grade ->
+            if (grade.number == grade_no) return grade
+        }
+        throw Exception("no such grade: ${grade_no}")
+    }
     fun find_volumn(event_no: Int, step_no: Int, grade_no: Int) : Volumn {
-        return find_volumn(events[event_no], find_step(event_no, step_no), grades[grade_no])
-
+        return find_volumn(find_event(event_no), find_step(event_no, step_no), find_grade(grade_no))
     }
     fun find_volumn(event: Event, step: Step, grade: Grade) : Volumn {
 
@@ -95,8 +111,8 @@ class ExerciseController (context: Context) {
                 return it
             }
         }
-        //throw Exception("volumn not found: ${event.number}/${step.number}/${grade.number}") // TODO:
-        Log.d("ExerciseDataset", "Volumn not found: ${event.number} / ${step.number} / ${grade.number}")
-        return volumns[0]  // TODO: just for debug
+        //Log.d("ExerciseDataset", "Volumn not found: ${event.number} / ${step.number} / ${grade.number}")
+        throw Exception("volumn not found: ${event.number}/${step.number}/${grade.number}") // TODO:
+        //return volumns[0]  // TODO: just for debug
     }
 }

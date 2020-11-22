@@ -2,10 +2,12 @@ package com.example.ccmanager
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ccmanager.RecordController.Companion.datetimeFormatter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,12 +19,14 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class RecordActivity : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record)
 
         updateUI()
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     fun updateUI() {
         val rec = RecordController(this)
         var strRecords: String = ""
@@ -56,6 +60,7 @@ class RecordActivity : AppCompatActivity() {
     public fun buttonBack(view: View){
         finish()
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     public fun buttonClear(view: View){
         // TODO: confirm dialog
         RecordController(this).clearRecords()
@@ -90,13 +95,6 @@ class RecordController (var context: Context) {
 
         val contents = arrayOf<String>(formatted,
                 task.event.number.toString(), task.step.number.toString(), task.grade.number.toString()
-        /*
-                exerciseData.event_id.toString(), exerciseData.event,
-                exerciseData.step_id.toString(), exerciseData.step,
-                exerciseData.grade_id.toString(), exerciseData.grade,
-                exerciseData.sets.toString(), exerciseData.reps.toString()
-
-         */
         ).joinToString(",")
         recordFile.appendText(contents + "\n")
             //it.write(contents.toByteArray())
@@ -116,7 +114,7 @@ class RecordController (var context: Context) {
                     val arr = it.split(',')
                     val dateTime = LocalDateTime.parse(arr[0], DateTimeFormatter.ofPattern(datetimePattern))
                     //val exerciseData = ExerciseData(arr[1].toInt(), arr[2], arr[3].toInt(), arr[4], arr[5].toInt(), arr[6], 0, arr[7].toInt(), arr[8].toInt()) // TODO: array overflow
-                    val task = ExerciseController(context).create_task(arr[1].toInt()-1, arr[2].toInt()-1, arr[3].toInt()-1)
+                    val task = ExerciseController(context).create_task(arr[1].toInt(), arr[2].toInt(), arr[3].toInt())
                     records.add(Item(dateTime, task))
                 } catch (e: RuntimeException) {
                     Log.d("RecordActivity", "ERROR: ${e.toString()}")

@@ -105,9 +105,9 @@ class MainActivity : AppCompatActivity() {
     }
     fun updateUI(){
         val ctrl = ExerciseController(this)
-        val volumn = ctrl.find_volumn(spinnerEvents.selectedItemPosition,
-                spinnerSteps.selectedItemPosition,
-                spinnerGrades.selectedItemPosition)
+        val volumn = ctrl.find_volumn(spinnerEvents.selectedItemPosition+1,
+                spinnerSteps.selectedItemPosition+1,
+                spinnerGrades.selectedItemPosition+1)
 
         Log.d("MainActivity", "volumn: ${volumn.sets} x ${volumn.reps}")
         textMaxReps.text = "${volumn.reps.toString()} reps"
@@ -117,9 +117,9 @@ class MainActivity : AppCompatActivity() {
     // onClickListener
     public fun buttonStart(view: View) {
         val intent: Intent = Intent(this, ExerciseActivity::class.java)
-        intent.putExtra("event_number", spinnerEvents.selectedItemPosition)
-        intent.putExtra("step_number", spinnerSteps.selectedItemPosition)
-        intent.putExtra("grade_number", spinnerGrades.selectedItemPosition)
+        intent.putExtra("event_number", spinnerEvents.selectedItemPosition+1)
+        intent.putExtra("step_number", spinnerSteps.selectedItemPosition+1)
+        intent.putExtra("grade_number", spinnerGrades.selectedItemPosition+1)
         intent.putExtra("interval", editTextInterval.text.toString().toIntOrNull() ?: 0)
 
         startActivity(intent)

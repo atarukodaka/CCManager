@@ -63,7 +63,7 @@ class ExerciseActivity : AppCompatActivity() {
     public fun buttonStop(view: View) { // cancel timer and back to main activity
         if (::timer.isInitialized) timer.cancel()
         //RecordController(this).clearRecords()
-        finishExercise() // TODO: DEBUG
+        //finishExercise() // TODO: DEBUG
         finish()
     }
     public fun buttonPauseResume(view: View) {
@@ -129,6 +129,7 @@ class ExerciseActivity : AppCompatActivity() {
                         } else {
                             state.tag = "INTERVAL"
                             state.interval = interval - (mod - 6 * task.volumn.reps )
+                            tone = "middle"
 
                             if (state.interval == interval) {
                                 tone = "high"

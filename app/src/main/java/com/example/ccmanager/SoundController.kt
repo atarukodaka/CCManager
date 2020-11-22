@@ -36,7 +36,7 @@ class SoundController : TextToSpeech.OnInitListener {
                     .build()
             soundPool = SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(2).build()
             beepHigh = soundPool.load(context, R.raw.beep_high, 1)
-            beepMiddle = soundPool.load(context, R.raw.beep_low, 1)
+            beepMiddle = soundPool.load(context, R.raw.beep_middle, 1)
             beepLow = soundPool.load(context, R.raw.beep_low, 1)
         }
 
